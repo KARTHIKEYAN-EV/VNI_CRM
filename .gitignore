@@ -1,0 +1,22 @@
+# Node
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Vite
+.vite
+
+# OS
+.DS_Store
+Thumbs.db
