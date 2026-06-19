@@ -4,6 +4,16 @@ Comp Copy Tracking System for Vijay Nicole Imprints, Chennai.
 
 ---
 
+## Deployed link
+
+| Service  | URL                          |
+|----------|------------------------------|
+| Frontend | https://vni-crm.netlify.app/      |
+| API docs | https://vni-crm.onrender.com/api/docs |
+| Database | https://supabase.com/   |
+
+---
+
 ## Quick Start (Docker — recommended)
 
 ```bash
@@ -16,13 +26,6 @@ docker compose up --build
 # 3. Seed the admin user (first time only)
 docker compose exec backend python seed.py
 ```
-
-| Service  | URL                          |
-|----------|------------------------------|
-| Frontend | https://vni-crm.netlify.app/      |
-| API docs | https://vni-crm.onrender.com/api/docs |
-| Database | https://supabase.com/   |
-
 
 
 ---
