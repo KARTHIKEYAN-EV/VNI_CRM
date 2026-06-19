@@ -19,12 +19,11 @@ docker compose exec backend python seed.py
 
 | Service  | URL                          |
 |----------|------------------------------|
-| Frontend | http://localhost:5173        |
-| API docs | http://localhost:8000/api/docs |
-| Database | localhost:5432 / vni / vni   |
+| Frontend | https://vni-crm.netlify.app/      |
+| API docs | https://vni-crm.onrender.com/api/docs |
+| Database | https://supabase.com/   |
 
-**Default credentials:** `admin@vni.in` / `Admin@VNI2026`
-Change immediately after first login.
+
 
 ---
 
