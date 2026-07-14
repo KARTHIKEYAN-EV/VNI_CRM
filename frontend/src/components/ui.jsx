@@ -1,5 +1,5 @@
 // =============================================================================
-// Shared UI primitives — v2 with full animation system
+// Shared UI primitives — v2 with full animation system (Light Theme)
 // =============================================================================
 import { useEffect, useRef, useState } from 'react'
 
@@ -23,7 +23,7 @@ export function PageHeader({ title, subtitle, action }) {
   return (
     <div className="stagger-in" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, gap: 12 }}>
       <div>
-        <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 700, fontFamily: 'Sora, sans-serif', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
+        <h1 style={{ color: '#111827', fontSize: 22, fontWeight: 700, fontFamily: 'Sora, sans-serif', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
           {title}
         </h1>
         {subtitle && (
@@ -37,17 +37,17 @@ export function PageHeader({ title, subtitle, action }) {
 
 // ── Status badges ────────────────────────────────────────────────────────────
 const BADGE_MAP = {
-  VERIFIED:       { bg: 'rgba(6,78,59,0.5)',   border: 'rgba(52,211,153,0.25)', text: '#6ee7b7', dot: '#34d399' },
-  PENDING_REVIEW: { bg: 'rgba(78,63,7,0.5)',   border: 'rgba(251,191,36,0.25)', text: '#fde68a', dot: '#fbbf24' },
-  active:         { bg: 'rgba(6,78,59,0.5)',   border: 'rgba(52,211,153,0.25)', text: '#6ee7b7', dot: '#34d399' },
-  inactive:       { bg: 'rgba(17,24,39,0.8)',  border: 'rgba(55,65,81,0.5)',    text: '#6b7280', dot: '#4b5563' },
-  Physical:       { bg: 'rgba(7,89,133,0.5)',  border: 'rgba(56,189,248,0.25)', text: '#7dd3fc', dot: '#38bdf8' },
-  Digital:        { bg: 'rgba(59,7,100,0.5)',  border: 'rgba(192,132,252,0.25)',text: '#d8b4fe', dot: '#c084fc' },
-  Both:           { bg: 'rgba(30,27,75,0.5)',  border: 'rgba(129,140,248,0.25)',text: '#a5b4fc', dot: '#818cf8' },
+  VERIFIED:       { bg: '#ecfdf5',   border: '#a7f3d0', text: '#065f46', dot: '#10b981' },
+  PENDING_REVIEW: { bg: '#fffbeb',   border: '#fde68a', text: '#92400e', dot: '#f59e0b' },
+  active:         { bg: '#ecfdf5',   border: '#a7f3d0', text: '#065f46', dot: '#10b981' },
+  inactive:       { bg: '#f9fafb',   border: '#e5e7eb', text: '#6b7280', dot: '#9ca3af' },
+  Physical:       { bg: '#f0f9ff',   border: '#bae6fd', text: '#075985', dot: '#0ea5e9' },
+  Digital:        { bg: '#f5f3ff',   border: '#ddd6fe', text: '#5b21b6', dot: '#8b5cf6' },
+  Both:           { bg: '#eef2ff',   border: '#c7d2fe', text: '#3730a3', dot: '#6366f1' },
 }
 
 export function StatusBadge({ value }) {
-  const s = BADGE_MAP[value] ?? { bg: 'rgba(17,24,39,0.8)', border: 'rgba(55,65,81,0.5)', text: '#6b7280', dot: '#4b5563' }
+  const s = BADGE_MAP[value] ?? { bg: '#f9fafb', border: '#e5e7eb', text: '#6b7280', dot: '#9ca3af' }
   return (
     <span className="scale-in" style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -66,7 +66,7 @@ export function EmptyState({ icon = '🔍', title = 'No results', subtitle }) {
   return (
     <div className="page-enter" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', textAlign: 'center' }}>
       <div className="float" style={{ fontSize: 40, marginBottom: 14, lineHeight: 1 }}>{icon}</div>
-      <p style={{ color: '#fff', fontWeight: 500, fontSize: 15, marginBottom: 6 }}>{title}</p>
+      <p style={{ color: '#111827', fontWeight: 500, fontSize: 15, marginBottom: 6 }}>{title}</p>
       {subtitle && <p style={{ color: '#6b7280', fontSize: 13, maxWidth: 280 }}>{subtitle}</p>}
     </div>
   )
@@ -98,16 +98,16 @@ function PagBtn({ children, onClick, disabled, active }) {
     <button onClick={onClick} disabled={disabled}
       style={{
         width: 28, height: 28, borderRadius: 7, fontSize: 12, fontWeight: 500,
-        background: active ? '#D01D22' : 'transparent',
-        color: active ? '#fff' : disabled ? '#374151' : '#9ca3af',
+        background: active ? '#6366f1' : 'transparent',
+        color: active ? '#fff' : disabled ? '#d1d5db' : '#6b7280',
         border: active ? 'none' : '1px solid transparent',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'background 150ms ease, color 150ms ease, transform 150ms ease',
         transform: active ? 'scale(1.05)' : 'scale(1)',
-        boxShadow: active ? '0 2px 8px rgba(208,29,34,0.3)' : 'none',
+        boxShadow: active ? '0 2px 8px rgba(99,102,241,0.3)' : 'none',
       }}
-      onMouseEnter={e => { if (!active && !disabled) { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#fff' } }}
-      onMouseLeave={e => { if (!active && !disabled) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#9ca3af' } }}
+      onMouseEnter={e => { if (!active && !disabled) { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = '#111827' } }}
+      onMouseLeave={e => { if (!active && !disabled) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6b7280' } }}
     >
       {children}
     </button>
@@ -125,7 +125,7 @@ function pageNumbers(current, total) {
 export function SearchInput({ value, onChange, placeholder = 'Search…', className = '' }) {
   return (
     <div style={{ position: 'relative' }} className={className}>
-      <svg style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: '#6b7280', pointerEvents: 'none' }}
+      <svg style={{ position: 'absolute', left: 11, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', pointerEvents: 'none' }}
         width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
@@ -138,12 +138,12 @@ export function SearchInput({ value, onChange, placeholder = 'Search…', classN
           className="scale-in"
           style={{
             position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
-            color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer',
+            color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer',
             fontSize: 11, lineHeight: 1, padding: 2,
             transition: 'color 150ms ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#fff' }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#6b7280' }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#111827' }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#9ca3af' }}
         >✕</button>
       )}
     </div>
@@ -161,42 +161,42 @@ export function ConfirmDialog({ open, title, message, onConfirm, onCancel, dange
           display: 'flex',
           alignItems: 'flex-start',   // Show at top
           justifyContent: 'center',
-          paddingTop: 40,             // Distance from top
+          paddingTop: 40,
           paddingLeft: 16,
           paddingRight: 16,
         }}>
       <div className="modal-backdrop"
-        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)' }}
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(2px)' }}
         onClick={onCancel} />
       <div className="modal-pop card-raised" style={{
                                               position: 'relative',
                                               padding: 24,
                                               width: '100%',
                                               maxWidth: 420,
-                                              background: '#1f2937',                 // Fully opaque background
-                                              border: '2px solid #4b5563',           // Visible border
+                                              background: '#ffffff',                 // light background
+                                              border: '2px solid #e5e7eb',           // light border
                                               borderRadius: 12,
-                                              boxShadow: '0 16px 40px rgba(0,0,0,0.45)',
+                                              boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
                                               opacity: 1,
                                             }}>
-        <h3 style={{ color: '#fff', fontWeight: 600, fontSize: 16, fontFamily: 'Sora, sans-serif', marginBottom: 8 }}>{title}</h3>
-        <p style={{ color: '#9ca3af', fontSize: 13, lineHeight: 1.5, marginBottom: 24 }}>{message}</p>
+        <h3 style={{ color: '#111827', fontWeight: 600, fontSize: 16, fontFamily: 'Sora, sans-serif', marginBottom: 8 }}>{title}</h3>
+        <p style={{ color: '#4b5563', fontSize: 13, lineHeight: 1.5, marginBottom: 24 }}>{message}</p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
           <button onClick={onCancel}
             style={{
-              padding: '8px 16px', borderRadius: 9, fontSize: 13, color: '#9ca3af',
+              padding: '8px 16px', borderRadius: 9, fontSize: 13, color: '#6b7280',
               background: 'transparent', border: 'none', cursor: 'pointer',
               transition: 'color 150ms ease, background 150ms ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#9ca3af'; e.currentTarget.style.background = 'transparent' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#111827'; e.currentTarget.style.background = 'rgba(0,0,0,0.04)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#6b7280'; e.currentTarget.style.background = 'transparent' }}
           >Cancel</button>
           <button onClick={onConfirm}
             style={{
               padding: '8px 16px', borderRadius: 9, fontSize: 13, fontWeight: 500, cursor: 'pointer',
-              background: danger ? 'rgba(127,29,29,0.5)' : 'rgba(6,78,59,0.5)',
-              color: danger ? '#fca5a5' : '#6ee7b7',
-              border: `1px solid ${danger ? 'rgba(239,68,68,0.3)' : 'rgba(52,211,153,0.3)'}`,
+              background: danger ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)',
+              color: danger ? '#dc2626' : '#059669',
+              border: `1px solid ${danger ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`,
               transition: 'background 150ms ease',
             }}
           >Confirm</button>
@@ -211,19 +211,19 @@ export function DuplicateWarning({ matches, onDismiss }) {
   if (!matches?.length) return null
   return (
     <div className="stagger-in" style={{
-      background: 'rgba(78,63,7,0.35)', border: '1px solid rgba(251,191,36,0.2)',
+      background: '#fef3c7', border: '1px solid #fde68a',
       borderRadius: 10, padding: '12px 14px', marginBottom: 16,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
         <div>
-          <p style={{ color: '#fde68a', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
+          <p style={{ color: '#92400e', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>
             ⚠️ Possible duplicate{matches.length > 1 ? 's' : ''} detected
           </p>
           <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
             {matches.map(m => (
-              <li key={m.id} style={{ color: '#fbbf24', fontSize: 12, marginBottom: 2 }}>
+              <li key={m.id} style={{ color: '#b45309', fontSize: 12, marginBottom: 2 }}>
                 #{m.id} · {m.name}{m.detail ? ` — ${m.detail}` : ''}{' '}
-                <span style={{ color: '#92400e' }}>({Math.round(m.similarity * 100)}% match)</span>
+                <span style={{ color: '#d97706' }}>({Math.round(m.similarity * 100)}% match)</span>
               </li>
             ))}
           </ul>
@@ -246,8 +246,7 @@ export function Spinner({ size = 20 }) {
 }
 
 // ── CustomSelect ─────────────────────────────────────────────────────────────
-// Fully custom dark dropdown — avoids native <select> popups which render with
-// the OS/browser default (often white) appearance regardless of CSS.
+// Fully custom light dropdown
 export function CustomSelect({
   value, onChange, options, placeholder = 'Select…', disabled = false,
   getLabel = o => o.label, getValue = o => o.value,
@@ -274,19 +273,19 @@ export function CustomSelect({
         className={`input text-sm flex items-center justify-between gap-2 text-left
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
       >
-        <span className={selected ? 'text-white truncate' : 'text-[var(--faint)] truncate'}>
+        <span className={selected ? 'text-gray-900 truncate' : 'text-[var(--faint)] truncate'}>
           {selected ? getLabel(selected) : placeholder}
         </span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-          className="text-gray-500 flex-shrink-0 transition-transform"
+          className="text-gray-400 flex-shrink-0 transition-transform"
           style={{ transform: open ? 'rotate(180deg)' : 'none' }}>
           <path d="M6 9l6 6 6-6" />
         </svg>
       </button>
 
       {open && !disabled && (
-        <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-[var(--card2)] border border-white/12 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto">
+        <div className="absolute z-30 top-full left-0 right-0 mt-1 bg-[var(--card2)] border border-black/12 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto">
           {options.length === 0 && (
             <p className="text-gray-500 text-sm px-4 py-3">No options</p>
           )}
@@ -298,7 +297,7 @@ export function CustomSelect({
                 type="button"
                 onClick={() => { onChange(getValue(o)); setOpen(false) }}
                 className={`w-full text-left px-4 py-2.5 text-sm transition-colors
-                  ${isSelected ? 'text-white bg-white/8' : 'text-gray-300 hover:bg-white/6 hover:text-white'}`}
+                  ${isSelected ? 'text-gray-900 bg-black/5' : 'text-gray-700 hover:bg-black/5 hover:text-gray-900'}`}
               >
                 {getLabel(o)}
               </button>
