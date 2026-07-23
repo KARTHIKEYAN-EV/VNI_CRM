@@ -108,7 +108,6 @@ function StatCard({ k, count, delay }) {
       }}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
     >
-      {/* Shimmer line on hover */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 1,
         background: hov
@@ -153,7 +152,7 @@ const SESSION_FIELDS = (user) => [
   { label: 'User ID', value: `#${user?.userId}`, icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', color: '#818cf8' },
   { label: 'Role', value: user?.role, icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', color: '#34d399' },
   { label: 'Region', value: user?.regionId ? `Region #${user.regionId}` : 'All', icon: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z', color: '#06b6d4' },
-  { label: 'Status', value: user?.isActive ? '● Active' : '○ Inactive', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: user?.isActive ? '#34d399' : '#f87171' },
+  { label: 'Status', value: user?.isActive ? '● Active' : '○ Inactive', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: user?.isActive ? 'var(--success)' : 'var(--danger)' },
 ]
 
 export default function Dashboard() {
@@ -189,7 +188,8 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div style={{ padding: '28px 28px 40px', maxWidth: 900, background: 'var(--bg)', minHeight: '100vh' }}>
+      {/* Transparent background to show the ambient starfield */}
+      <div style={{ padding: '28px 28px 40px', maxWidth: 900, background: 'transparent', minHeight: '100vh' }}>
         {/* ── Header ──────────────────────────────────────────────────── */}
         <div className="stagger-in d0" style={{ marginBottom: 36 }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
@@ -309,7 +309,7 @@ export default function Dashboard() {
                     <span style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>{label}</span>
                   </div>
                   <p style={{
-                    color: label === 'Status' ? (user?.isActive ? '#34d399' : '#f87171') : 'var(--text)',
+                    color: label === 'Status' ? (user?.isActive ? 'var(--success)' : 'var(--danger)') : 'var(--text)',
                     fontSize: 13, fontWeight: 600,
                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                   }}>{value ?? '—'}</p>
@@ -358,16 +358,20 @@ export default function Dashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {PHASES.map(({ id, label, done, next, items }, i) => {
                 const [hov, setHov] = useState(false)
-                const dotColor = done ? '#10b981' : next ? '#fbbf24' : '#334155'
-                const accentColor = done ? '#10b981' : next ? '#fbbf24' : '#334155'
+                const dotColor = done ? 'var(--phase-done-dot)' : next ? 'var(--phase-next-dot)' : 'var(--phase-pending-dot)'
+                const accentColor = done ? 'var(--phase-done-accent)' : next ? 'var(--phase-next-accent)' : 'var(--phase-pending-accent)'
                 const bg = hov
-                  ? done ? 'rgba(5,46,37,0.45)' : next ? 'rgba(69,48,8,0.5)' : 'rgba(255,255,255,0.04)'
-                  : done ? 'rgba(5,46,37,0.25)' : next ? 'rgba(69,48,8,0.3)' : 'rgba(255,255,255,0.02)'
+                  ? done ? 'var(--phase-done-bg-hover)' : next ? 'var(--phase-next-bg-hover)' : 'var(--phase-pending-bg-hover)'
+                  : done ? 'var(--phase-done-bg)' : next ? 'var(--phase-next-bg)' : 'var(--phase-pending-bg)'
                 const border = done
-                  ? `1px solid rgba(16,185,129,${hov ? 0.25 : 0.12})`
-                  : next ? `1px solid rgba(245,158,11,${hov ? 0.25 : 0.12})`
-                  : '1px solid rgba(255,255,255,0.04)'
-                const textC = done ? '#6ee7b7' : next ? '#fde68a' : '#334155'
+                  ? `1px solid var(--phase-done-border${hov ? '-hover' : ''})`
+                  : next ? `1px solid var(--phase-next-border${hov ? '-hover' : ''})`
+                  : `1px solid var(--phase-pending-border)`
+                const textC = done ? 'var(--phase-done-text)' : next ? 'var(--phase-next-text)' : 'var(--phase-pending-text)'
+                const itemsColor = 'var(--phase-items-text)'
+                const badgeBg = done ? 'var(--phase-done-badge-bg)' : next ? 'var(--phase-next-badge-bg)' : 'transparent'
+                const badgeColor = done ? 'var(--phase-done-badge-text)' : next ? 'var(--phase-next-badge-text)' : 'transparent'
+                const badgeBorder = done ? '1px solid var(--phase-done-badge-border)' : next ? '1px solid var(--phase-next-badge-border)' : 'none'
                 return (
                   <div key={id}
                     className="stagger-in"
@@ -385,7 +389,7 @@ export default function Dashboard() {
                     <span style={{
                       width: 8, height: 8, borderRadius: '50%',
                       background: dotColor, flexShrink: 0,
-                      boxShadow: next ? `0 0 10px ${dotColor}` : done ? `0 0 5px ${dotColor}6d` : 'none',
+                      boxShadow: next ? `0 0 10px var(--phase-next-dot)` : done ? `0 0 5px var(--phase-done-dot)6d` : 'none',
                       animation: next ? 'pulseGlow 2s ease-in-out infinite' : 'none',
                     }} />
                     <span style={{
@@ -394,7 +398,7 @@ export default function Dashboard() {
                     }}>{id}</span>
                     <span style={{ color: textC, fontSize: 13, fontWeight: 500, flexShrink: 0, minWidth: 160 }}>{label}</span>
                     <span style={{
-                      color: '#334155', fontSize: 11,
+                      color: itemsColor, fontSize: 11,
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                     }}>{items}</span>
                     {(done || next) && (
@@ -402,9 +406,9 @@ export default function Dashboard() {
                         marginLeft: 'auto', flexShrink: 0,
                         padding: '2px 9px', borderRadius: 20,
                         fontSize: 10, fontWeight: 600, letterSpacing: '0.05em',
-                        background: done ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
-                        color: done ? '#34d399' : '#fbbf24',
-                        border: done ? '1px solid rgba(16,185,129,0.25)' : '1px solid rgba(245,158,11,0.25)',
+                        background: badgeBg,
+                        color: badgeColor,
+                        border: badgeBorder,
                       }}>
                         {done ? 'Done' : 'Next'}
                       </span>
