@@ -98,19 +98,19 @@ export default function Colleges() {
   const columns = [
     {
       key: 'collegeName', header: 'College', sortable: true,
-      render: row => <span className="text-gray-900 dark:text-white font-medium">{row.collegeName}</span>,
+      render: row => <span style={{ color: 'var(--text)', fontWeight: 500 }}>{row.collegeName}</span>,
     },
     {
       key: 'collegeType', header: 'Type', width: 'w-32',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs capitalize">{row.collegeType}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12, textTransform: 'capitalize' }}>{row.collegeType}</span>,
     },
     {
       key: 'region', header: 'Region', width: 'w-40',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.region?.regionName ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.region?.regionName ?? '—'}</span>,
     },
     {
       key: 'addressCity', header: 'City', width: 'w-36',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.addressCity ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.addressCity ?? '—'}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-28',
@@ -120,14 +120,15 @@ export default function Colleges() {
 
   const rowActions = row => {
     const acts = [{ label: 'Edit', onClick: openEdit }]
-    if ((isAdmin || isRep) && row.isActive) // adjust as per original logic
+    if ((isAdmin || isRep) && row.isActive)
       acts.push({ label: 'Deactivate', onClick: r => setConfirmRow(r), danger: true })
     return acts
   }
 
   return (
     <Layout>
-      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
+      {/* Transparent background to show the starfield */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader
           title="Colleges"
           subtitle={`${total} institutions`}
@@ -152,17 +153,95 @@ export default function Colleges() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit College' : 'Add College'} onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
+          <div style={{
+            backgroundColor: 'var(--error-bg)',
+            border: '1px solid var(--error-border)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            marginBottom: 16,
+            color: 'var(--error-text)',
+            fontSize: 13,
+          }}>
             {formError}
           </div>
         )}
-        {/* Form fields with updated classes if needed - similar pattern */}
+
         <Field label="College Name" required>
           <input className="input" value={form.collegeName}
-            onChange={e => setForm(f => ({ ...f, collegeName: e.target.value }))} />
+            onChange={e => setForm(f => ({ ...f, collegeName: e.target.value }))}
+            placeholder="e.g. Government Arts College" />
         </Field>
-        {/* ... other fields follow similar light/dark pattern ... */}
-        {/* (Full form fields kept identical in structure) */}
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="College Type">
+            <Select value={form.collegeType} onChange={v => setForm(f => ({ ...f, collegeType: v }))}>
+              <option value="Arts">Arts</option>
+              <option value="Science">Science</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Medical">Medical</option>
+              <option value="Law">Law</option>
+            </Select>
+          </Field>
+          <Field label="Region" required>
+            <Select value={form.regionId} onChange={v => setForm(f => ({ ...f, regionId: v }))}>
+              <option value="">Select region</option>
+              {regions.map(r => (
+                <option key={r.regionId} value={r.regionId}>{r.regionName}</option>
+              ))}
+            </Select>
+          </Field>
+        </div>
+
+        <Field label="Affiliated University">
+          <input className="input" value={form.affiliatedUniversity}
+            onChange={e => setForm(f => ({ ...f, affiliatedUniversity: e.target.value }))}
+            placeholder="e.g. University of Madras" />
+        </Field>
+
+        <Field label="Address Street">
+          <input className="input" value={form.addressStreet}
+            onChange={e => setForm(f => ({ ...f, addressStreet: e.target.value }))}
+            placeholder="123 College Road" />
+        </Field>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="City">
+            <input className="input" value={form.addressCity}
+              onChange={e => setForm(f => ({ ...f, addressCity: e.target.value }))}
+              placeholder="Chennai" />
+          </Field>
+          <Field label="District">
+            <input className="input" value={form.addressDistrict}
+              onChange={e => setForm(f => ({ ...f, addressDistrict: e.target.value }))}
+              placeholder="Chennai" />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="State">
+            <input className="input" value={form.addressState}
+              onChange={e => setForm(f => ({ ...f, addressState: e.target.value }))}
+              placeholder="Tamil Nadu" />
+          </Field>
+          <Field label="PIN Code">
+            <input className="input" value={form.addressPin}
+              onChange={e => setForm(f => ({ ...f, addressPin: e.target.value }))}
+              placeholder="600001" />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Phone">
+            <input className="input" type="tel" value={form.phone}
+              onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+              placeholder="044-12345678" />
+          </Field>
+          <Field label="Email">
+            <input className="input" type="email" value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+              placeholder="college@edu.in" />
+          </Field>
+        </div>
       </FormModal>
 
       <ConfirmDialog open={Boolean(confirmRow)} title="Deactivate College"
