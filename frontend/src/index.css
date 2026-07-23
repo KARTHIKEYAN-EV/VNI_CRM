@@ -371,6 +371,18 @@
   --accent-orange-text:   #fdba74;
   --accent-orange-border: rgba(249,115,22,0.3);
 }
+:root {
+  /* ... existing light variables ... */
+  --warning-bg:    rgba(245,158,11,0.12);
+  --warning-border:rgba(245,158,11,0.3);
+  --warning-text:  #92400e;
+}
+.dark {
+  /* ... existing dark variables ... */
+  --warning-bg:    rgba(146,64,14,0.4);
+  --warning-border:rgba(245,158,11,0.3);
+  --warning-text:  #fde68a;
+}
 /* ─── RESET / BASE ───────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
