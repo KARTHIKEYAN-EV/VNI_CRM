@@ -16,21 +16,21 @@ const EMPTY_FORM = { authorName: '', email: '', phone: '', bio: '' }
 
 export default function Authors() {
   const { hasRole } = useAuth()
-  const isAdmin     = hasRole('admin')
+  const isAdmin = hasRole('admin')
 
-  const [items,     setItems]     = useState([])
-  const [total,     setTotal]     = useState(0)
-  const [page,      setPage]      = useState(1)
-  const [pages,     setPages]     = useState(1)
-  const [loading,   setLoading]   = useState(true)
-  const [search,    setSearch]    = useState('')
+  const [items, setItems] = useState([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 350)
 
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [editing,    setEditing]    = useState(null)
-  const [form,       setForm]       = useState(EMPTY_FORM)
-  const [saving,     setSaving]     = useState(false)
-  const [formError,  setFormError]  = useState('')
+  const [editing, setEditing] = useState(null)
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
   const [confirmRow, setConfirmRow] = useState(null)
 
   const fetchItems = useCallback(async () => {
@@ -59,9 +59,9 @@ export default function Authors() {
     try {
       const payload = {
         authorName: form.authorName,
-        email:      form.email || undefined,
-        phone:      form.phone || undefined,
-        bio:        form.bio   || undefined,
+        email: form.email || undefined,
+        phone: form.phone || undefined,
+        bio: form.bio || undefined,
       }
       editing
         ? await authorsApi.update(editing.authorId, payload)
@@ -79,15 +79,15 @@ export default function Authors() {
   const columns = [
     {
       key: 'authorName', header: 'Author', sortable: true,
-      render: row => <span className="text-gray-900 dark:text-white font-medium">{row.authorName}</span>,
+      render: row => <span style={{ color: 'var(--text)', fontWeight: 500 }}>{row.authorName}</span>,
     },
     {
       key: 'email', header: 'Email', width: 'w-52',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.email ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.email ?? '—'}</span>,
     },
     {
       key: 'phone', header: 'Phone', width: 'w-36',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs font-mono">{row.phone ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>{row.phone ?? '—'}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-28',
@@ -104,7 +104,7 @@ export default function Authors() {
 
   return (
     <Layout>
-      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
+      <div style={{ padding: '1.5rem', background: 'var(--bg)', minHeight: '100vh' }}>
         <PageHeader
           title="Authors"
           subtitle={`${total} authors`}
@@ -135,7 +135,15 @@ export default function Authors() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Author' : 'Add Author'} onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
+          <div style={{
+            backgroundColor: 'var(--error-bg)',
+            border: '1px solid var(--error-border)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            marginBottom: 16,
+            color: 'var(--error-text)',
+            fontSize: 13,
+          }}>
             {formError}
           </div>
         )}
