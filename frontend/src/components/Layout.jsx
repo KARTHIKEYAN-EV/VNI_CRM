@@ -280,6 +280,26 @@ function Topbar({ onMenuClick }) {
           </div>
         </div>
       </div>
+      {/* Theme Toggle - add here, after user info div */}
+      <button
+        onClick={() => {
+          const isDark = document.documentElement.classList.contains('dark');
+          const newTheme = isDark ? 'light' : 'dark';
+          document.documentElement.classList.toggle('dark', newTheme === 'dark');
+          localStorage.setItem('theme', newTheme);
+        }}
+        style={{
+          width: 34, height: 34, borderRadius: 9, border: '1px solid rgba(15,23,42,0.1)',
+          background: 'rgba(15,23,42,0.05)', color: 'var(--muted)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', transition: 'all 150ms'
+        }}
+        title="Toggle theme"
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(15,23,42,0.1)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(15,23,42,0.05)'; }}
+      >
+        {document.documentElement.classList.contains('dark') ? '☀️' : '🌙'}
+      </button>
     </header>
   )
 }
