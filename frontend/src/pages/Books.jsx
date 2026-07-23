@@ -15,28 +15,28 @@ import { useAuth } from '../auth/AuthContext'
 const EMPTY_FORM = {
   title: '', isbn: '', edition: '', subjectArea: '',
   discipline: '', mrp: '', format: 'Physical', compStock: '0',
-  authorIds: [],   // [{authorId, authorOrder}]
+  authorIds: [],
 }
 
 export default function Books() {
   const { hasRole } = useAuth()
-  const isAdmin     = hasRole('admin')
+  const isAdmin = hasRole('admin')
 
-  const [items,      setItems]      = useState([])
-  const [total,      setTotal]      = useState(0)
-  const [page,       setPage]       = useState(1)
-  const [pages,      setPages]      = useState(1)
-  const [loading,    setLoading]    = useState(true)
-  const [search,     setSearch]     = useState('')
+  const [items, setItems] = useState([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 350)
 
   const [allAuthors, setAllAuthors] = useState([])
 
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [editing,    setEditing]    = useState(null)
-  const [form,       setForm]       = useState(EMPTY_FORM)
-  const [saving,     setSaving]     = useState(false)
-  const [formError,  setFormError]  = useState('')
+  const [editing, setEditing] = useState(null)
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
   const [confirmRow, setConfirmRow] = useState(null)
 
   const fetchItems = useCallback(async () => {
@@ -57,15 +57,15 @@ export default function Books() {
   function openEdit(row) {
     setEditing(row)
     setForm({
-      title:       row.title,
-      isbn:        row.isbn        ?? '',
-      edition:     row.edition     ?? '',
+      title: row.title,
+      isbn: row.isbn ?? '',
+      edition: row.edition ?? '',
       subjectArea: row.subjectArea ?? '',
-      discipline:  row.discipline  ?? '',
-      mrp:         String(row.mrp),
-      format:      row.format,
-      compStock:   String(row.compStock),
-      authorIds:   row.authors.map(a => ({ authorId: a.authorId, authorOrder: a.authorOrder })),
+      discipline: row.discipline ?? '',
+      mrp: String(row.mrp),
+      format: row.format,
+      compStock: String(row.compStock),
+      authorIds: row.authors.map(a => ({ authorId: a.authorId, authorOrder: a.authorOrder })),
     })
     setFormError(''); setDrawerOpen(true)
   }
@@ -86,15 +86,15 @@ export default function Books() {
     setFormError(''); setSaving(true)
     try {
       const payload = {
-        title:       form.title,
-        isbn:        form.isbn        || undefined,
-        edition:     form.edition     || undefined,
+        title: form.title,
+        isbn: form.isbn || undefined,
+        edition: form.edition || undefined,
         subjectArea: form.subjectArea || undefined,
-        discipline:  form.discipline  || undefined,
-        mrp:         Number(form.mrp),
-        format:      form.format,
-        compStock:   Number(form.compStock) || 0,
-        authors:     form.authorIds,
+        discipline: form.discipline || undefined,
+        mrp: Number(form.mrp),
+        format: form.format,
+        compStock: Number(form.compStock) || 0,
+        authors: form.authorIds,
       }
       editing
         ? await booksApi.update(editing.bookId, payload)
@@ -114,8 +114,8 @@ export default function Books() {
       key: 'title', header: 'Title', sortable: true,
       render: row => (
         <div>
-          <p className="text-gray-900 dark:text-white font-medium leading-tight">{row.title}</p>
-          <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
+          <p style={{ color: 'var(--text)', fontWeight: 500, lineHeight: 1.25 }}>{row.title}</p>
+          <p style={{ color: 'var(--muted)', fontSize: 12, marginTop: 2 }}>
             {row.authors.map(a => a.authorName).join(', ') || 'No authors'}
             {row.edition ? ` · ${row.edition} Ed.` : ''}
           </p>
@@ -124,16 +124,19 @@ export default function Books() {
     },
     {
       key: 'subjectArea', header: 'Subject', width: 'w-40',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.subjectArea ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.subjectArea ?? '—'}</span>,
     },
     {
       key: 'mrp', header: 'MRP', sortable: true, width: 'w-24',
-      render: row => <span className="text-gray-700 dark:text-gray-300 font-mono text-xs">₹{row.mrp}</span>,
+      render: row => <span style={{ color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace', fontSize: 12 }}>₹{row.mrp}</span>,
     },
     {
       key: 'compStock', header: 'Comp Stock', sortable: true, width: 'w-28',
       render: row => (
-        <span className={`font-mono text-xs ${row.compStock === 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+        <span style={{
+          fontFamily: 'JetBrains Mono, monospace', fontSize: 12,
+          color: row.compStock === 0 ? 'var(--danger)' : 'var(--success)'
+        }}>
           {row.compStock}
         </span>
       ),
@@ -157,7 +160,8 @@ export default function Books() {
 
   return (
     <Layout>
-      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
+      {/* Page wrapper – transparent to show ambient background */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader
           title="Book Catalog"
           subtitle={`${total} titles`}
@@ -187,7 +191,15 @@ export default function Books() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Book' : 'Add Book'} onSave={handleSave} saving={saving} width="max-w-lg">
         {formError && (
-          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
+          <div style={{
+            backgroundColor: 'var(--error-bg)',
+            border: '1px solid var(--error-border)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            marginBottom: 16,
+            color: 'var(--error-text)',
+            fontSize: 13,
+          }}>
             {formError}
           </div>
         )}
@@ -233,17 +245,38 @@ export default function Books() {
           </Field>
         </div>
 
-        {/* Author assignment */}
         <Field label="Authors">
           <div className="grid grid-cols-2 gap-1.5 max-h-40 overflow-y-auto pr-1">
             {allAuthors.map(a => {
               const selected = form.authorIds.some(x => x.authorId === a.authorId)
               return (
                 <button key={a.authorId} onClick={() => toggleAuthor(a.authorId)}
-                  className={`text-left px-3 py-2 rounded-lg text-xs transition-all
-                    ${selected
-                      ? 'bg-brand-red/20 dark:bg-brand-red/30 border border-brand-red/40 text-gray-900 dark:text-white'
-                      : 'bg-white dark:bg-white/5 border border-gray-200 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10'}`}>
+                  style={{
+                    textAlign: 'left',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    fontSize: 12,
+                    cursor: 'pointer',
+                    transition: 'all 150ms',
+                    backgroundColor: selected ? 'var(--primary-soft)' : 'var(--card)',
+                    border: selected
+                      ? '1px solid var(--primary)'
+                      : '1px solid var(--border)',
+                    color: selected ? 'var(--text)' : 'var(--muted)',
+                  }}
+                  onMouseEnter={e => {
+                    if (!selected) {
+                      e.currentTarget.style.backgroundColor = 'var(--hover-bg)';
+                      e.currentTarget.style.color = 'var(--text)';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!selected) {
+                      e.currentTarget.style.backgroundColor = 'var(--card)';
+                      e.currentTarget.style.color = 'var(--muted)';
+                    }
+                  }}
+                >
                   {a.authorName}
                 </button>
               )
