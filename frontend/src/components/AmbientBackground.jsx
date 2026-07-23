@@ -57,55 +57,36 @@ export function ParticleField({ count = 46 }) {
 /* ── Global ambient background (blobs + grid + vignette + particles) ─────── */
 export default function AmbientBackground({ particleCount = 46 }) {
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden',
-      background: '#05080f',
-    }}>
-      {/* Primary indigo blob — top left */}
-      <div className="blob-1" style={{
-        position: 'absolute', top: '-5%', left: '-8%',
-        width: 700, height: 700,
-        background: 'radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 65%)',
-        borderRadius: '50%', filter: 'blur(70px)',
-      }} />
-      {/* Cyan blob — top right */}
-      <div className="blob-2" style={{
-        position: 'absolute', top: '10%', right: '-5%',
-        width: 550, height: 550,
-        background: 'radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 65%)',
-        borderRadius: '50%', filter: 'blur(60px)',
-      }} />
-      {/* Violet blob — center */}
-      <div className="blob-3" style={{
-        position: 'absolute', top: '45%', left: '40%',
-        width: 500, height: 500,
-        background: 'radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 65%)',
-        borderRadius: '50%', filter: 'blur(55px)',
-        transform: 'translate(-50%,-50%)',
-      }} />
-      {/* Deep indigo blob — bottom */}
-      <div className="blob-4" style={{
-        position: 'absolute', bottom: '-10%', left: '20%',
-        width: 600, height: 500,
-        background: 'radial-gradient(circle, rgba(79,70,229,0.09) 0%, transparent 65%)',
-        borderRadius: '50%', filter: 'blur(65px)',
-      }} />
+    <div
+      className="ambient-background"
+      style={{ background: 'var(--bg)' }}
+    >
+      {/* Blobs – all visual definitions now in index.css via custom properties */}
+      <div
+        className="ambient-blob blob-1"
+        style={{ top: '-5%', left: '-8%', width: 700, height: 700 }}
+      />
+      <div
+        className="ambient-blob blob-2"
+        style={{ top: '10%', right: '-5%', width: 550, height: 550 }}
+      />
+      <div
+        className="ambient-blob blob-3"
+        style={{ top: '45%', left: '40%', width: 500, height: 500, transform: 'translate(-50%,-50%)' }}
+      />
+      <div
+        className="ambient-blob blob-4"
+        style={{ bottom: '-10%', left: '20%', width: 600, height: 500 }}
+      />
+
       {/* Subtle grid */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px)
-        `,
-        backgroundSize: '56px 56px',
-      }} />
+      <div className="ambient-grid" />
+
       {/* Ambient particles */}
       <ParticleField count={particleCount} />
+
       {/* Edge vignette */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 120% 120% at 50% 50%, transparent 45%, rgba(5,8,15,0.7) 100%)',
-      }} />
+      <div className="ambient-vignette" />
     </div>
   )
 }
