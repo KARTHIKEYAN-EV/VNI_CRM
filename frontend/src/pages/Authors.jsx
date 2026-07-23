@@ -104,7 +104,8 @@ export default function Authors() {
 
   return (
     <Layout>
-      <div style={{ padding: '1.5rem', background: 'var(--bg)', minHeight: '100vh' }}>
+      {/* Transparent background — shows the ambient starfield */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader
           title="Authors"
           subtitle={`${total} authors`}
