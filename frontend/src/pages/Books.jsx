@@ -114,8 +114,8 @@ export default function Books() {
       key: 'title', header: 'Title', sortable: true,
       render: row => (
         <div>
-          <p className="text-white font-medium leading-tight">{row.title}</p>
-          <p className="text-gray-500 text-xs mt-0.5">
+          <p className="text-gray-900 dark:text-white font-medium leading-tight">{row.title}</p>
+          <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
             {row.authors.map(a => a.authorName).join(', ') || 'No authors'}
             {row.edition ? ` · ${row.edition} Ed.` : ''}
           </p>
@@ -124,16 +124,16 @@ export default function Books() {
     },
     {
       key: 'subjectArea', header: 'Subject', width: 'w-40',
-      render: row => <span className="text-gray-400 text-xs">{row.subjectArea ?? '—'}</span>,
+      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.subjectArea ?? '—'}</span>,
     },
     {
       key: 'mrp', header: 'MRP', sortable: true, width: 'w-24',
-      render: row => <span className="text-gray-300 font-mono text-xs">₹{row.mrp}</span>,
+      render: row => <span className="text-gray-700 dark:text-gray-300 font-mono text-xs">₹{row.mrp}</span>,
     },
     {
       key: 'compStock', header: 'Comp Stock', sortable: true, width: 'w-28',
       render: row => (
-        <span className={`font-mono text-xs ${row.compStock === 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+        <span className={`font-mono text-xs ${row.compStock === 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
           {row.compStock}
         </span>
       ),
@@ -157,7 +157,7 @@ export default function Books() {
 
   return (
     <Layout>
-      <div className="p-6">
+      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
         <PageHeader
           title="Book Catalog"
           subtitle={`${total} titles`}
@@ -187,7 +187,7 @@ export default function Books() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Book' : 'Add Book'} onSave={handleSave} saving={saving} width="max-w-lg">
         {formError && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-400 text-sm">
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
             {formError}
           </div>
         )}
@@ -242,8 +242,8 @@ export default function Books() {
                 <button key={a.authorId} onClick={() => toggleAuthor(a.authorId)}
                   className={`text-left px-3 py-2 rounded-lg text-xs transition-all
                     ${selected
-                      ? 'bg-brand-red/20 border border-brand-red/40 text-white'
-                      : 'bg-white/4 border border-white/8 text-gray-400 hover:text-white hover:bg-white/8'}`}>
+                      ? 'bg-brand-red/20 dark:bg-brand-red/30 border border-brand-red/40 text-gray-900 dark:text-white'
+                      : 'bg-white dark:bg-white/5 border border-gray-200 dark:border-white/8 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10'}`}>
                   {a.authorName}
                 </button>
               )
