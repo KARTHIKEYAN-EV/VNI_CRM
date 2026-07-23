@@ -114,34 +114,46 @@ export default function Courses() {
     } finally { setSaving(false) }
   }
 
+  // Course type badge styles using theme variables
+  const courseTypeStyle = (type) => {
+    if (type === 'UG') return { bg: 'var(--course-type-ug-bg)', text: 'var(--course-type-ug-text)', border: 'var(--course-type-ug-border)' }
+    if (type === 'PG') return { bg: 'var(--course-type-pg-bg)', text: 'var(--course-type-pg-text)', border: 'var(--course-type-pg-border)' }
+    return { bg: 'var(--course-type-other-bg)', text: 'var(--course-type-other-text)', border: 'var(--course-type-other-border)' }
+  }
+
   const columns = [
     {
       key: 'courseName', header: 'Course', sortable: true,
       render: row => (
         <div>
-          <p className="text-white font-medium">{row.courseName}</p>
-          <p className="text-gray-500 text-xs">{row.college?.collegeName} · {row.department?.deptName}</p>
+          <p style={{ color: 'var(--text)', fontWeight: 500 }}>{row.courseName}</p>
+          <p style={{ color: 'var(--muted)', fontSize: 12 }}>
+            {row.college?.collegeName} · {row.department?.deptName}
+          </p>
         </div>
       ),
     },
     {
       key: 'courseType', header: 'Type', width: 'w-24',
-      render: row => (
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-md
-          ${row.courseType === 'UG' ? 'bg-blue-950/50 text-blue-400' :
-            row.courseType === 'PG' ? 'bg-purple-950/50 text-purple-400' :
-            'bg-gray-900 text-gray-400'}`}>
-          {row.courseType}
-        </span>
-      ),
+      render: row => {
+        const s = courseTypeStyle(row.courseType)
+        return (
+          <span style={{
+            fontSize: 12, fontWeight: 600, padding: '2px 8px', borderRadius: 6,
+            background: s.bg, color: s.text, border: `1px solid ${s.border}`,
+          }}>
+            {row.courseType}
+          </span>
+        )
+      },
     },
     {
       key: 'durationYears', header: 'Duration', width: 'w-28',
-      render: row => <span className="text-gray-400 text-xs">{row.durationYears} yr{row.durationYears > 1 ? 's' : ''}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.durationYears} yr{row.durationYears > 1 ? 's' : ''}</span>,
     },
     {
       key: 'subjectCount', header: 'Subjects', width: 'w-24',
-      render: row => <span className="text-gray-400 text-xs font-mono">{row.subjectCount}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>{row.subjectCount}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-24',
@@ -158,7 +170,8 @@ export default function Courses() {
 
   return (
     <Layout>
-      <div className="p-6">
+      {/* Transparent background – shows ambient starfield */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader title="Courses" subtitle={`${total} programmes`}
           action={<button onClick={openCreate} className="btn-primary px-4 py-2 text-sm">+ Add Course</button>} />
 
@@ -195,7 +208,13 @@ export default function Courses() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Course' : 'Add Course'} onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-400 text-sm">{formError}</div>
+          <div style={{
+            background: 'var(--error-bg)', border: '1px solid var(--error-border)',
+            borderRadius: 12, padding: '12px 16px', marginBottom: 16,
+            color: 'var(--error-text)', fontSize: 13,
+          }}>
+            {formError}
+          </div>
         )}
         <Field label="College" required>
           <Select value={form.collegeId} onChange={v => setField('collegeId', v)}>
