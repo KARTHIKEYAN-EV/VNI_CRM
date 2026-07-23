@@ -53,21 +53,21 @@ function AddFacultyModal({ open, onClose, onCreated, colleges }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative card p-6 w-full max-w-sm shadow-2xl">
-        <h3 className="text-white font-semibold font-display mb-1">Add Faculty</h3>
-        <p className="text-amber-400 text-xs mb-4">
+      <div className="card p-6 w-full max-w-sm shadow-2xl" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+        <h3 style={{ color: 'var(--text)', fontWeight: 600, fontFamily: 'Sora, sans-serif', marginBottom: 4 }}>Add Faculty</h3>
+        <p style={{ color: '#d97706', fontSize: 12, marginBottom: 16 }}>
           ⚠️ New faculty will be flagged as PENDING_REVIEW for Admin verification
         </p>
-        {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-        <div className="space-y-3">
+        {error && <p style={{ color: 'var(--error-text)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div>
-            <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1">Name *</label>
+            <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Name *</label>
             <input className="input text-sm" value={form.facultyName}
               onChange={e => setForm(f => ({ ...f, facultyName: e.target.value }))}
               placeholder="Dr. / Mr. / Ms." />
           </div>
           <div>
-            <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1">College *</label>
+            <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>College *</label>
             <CustomSelect
               value={form.collegeId}
               onChange={v => setForm(f => ({ ...f, collegeId: v, deptId: '' }))}
@@ -78,7 +78,7 @@ function AddFacultyModal({ open, onClose, onCreated, colleges }) {
             />
           </div>
           <div>
-            <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1">Department *</label>
+            <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Department *</label>
             <CustomSelect
               value={form.deptId}
               onChange={v => setForm(f => ({ ...f, deptId: v }))}
@@ -90,14 +90,18 @@ function AddFacultyModal({ open, onClose, onCreated, colleges }) {
             />
           </div>
           <div>
-            <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1">Mobile</label>
+            <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Mobile</label>
             <input className="input text-sm" value={form.phonePersonal}
               onChange={e => setForm(f => ({ ...f, phonePersonal: e.target.value }))}
               placeholder="9XXXXXXXXX" />
           </div>
         </div>
-        <div className="flex gap-2 mt-4 justify-end">
-          <button onClick={onClose} className="px-3 py-1.5 text-sm text-gray-500 hover:text-white transition-all">Cancel</button>
+        <div style={{ display: 'flex', gap: 8, marginTop: 16, justifyContent: 'flex-end' }}>
+          <button onClick={onClose}
+            style={{ color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}
+          >Cancel</button>
           <button onClick={handleSave} disabled={saving} className="btn-primary px-4 py-1.5 text-sm">
             {saving ? 'Saving…' : 'Add Faculty'}
           </button>
@@ -204,7 +208,7 @@ export default function CompRequestNew() {
 
   // ── Add book to line ─────────────────────────────────────────────────────
   async function addBook(book) {
-    if (lineItems.some(li => li.bookId === book.bookId)) return  // already in list
+    if (lineItems.some(li => li.bookId === book.bookId)) return
 
     let dupWarning = null
     if (selectedFaculty) {
@@ -301,18 +305,25 @@ export default function CompRequestNew() {
 
   return (
     <Layout>
-      <div className="p-4 md:p-6 max-w-2xl">
+      {/* Transparent background for starfield */}
+      <div style={{ padding: '1.5rem', maxWidth: '42rem', minHeight: '100vh', background: 'transparent' }}>
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
           <button onClick={() => navigate('/requests')}
-            className="text-gray-500 hover:text-white transition-colors text-sm">← Back</button>
-          <h1 className="text-xl font-bold text-white font-display">
+            style={{ color: 'var(--muted)', fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+            ← Back
+          </button>
+          <h1 style={{ color: 'var(--text)', fontSize: 20, fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>
             {isEdit ? 'Edit Draft' : 'New Comp Request'}
           </h1>
         </div>
 
         {error && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-5 text-red-400 text-sm">
+          <div style={{
+            background: 'var(--error-bg)', border: '1px solid var(--error-border)',
+            borderRadius: 12, padding: '12px 16px', marginBottom: 20,
+            color: 'var(--error-text)', fontSize: 13,
+          }}>
             {error}
           </div>
         )}
@@ -320,23 +331,29 @@ export default function CompRequestNew() {
         {/* ── Section 1: Faculty ─────────────────────────────────────── */}
         <Section title="Faculty" icon="👤">
           {selectedFaculty ? (
-            <div className="flex items-start justify-between bg-white/4 border border-white/10 rounded-xl px-4 py-3">
+            <div style={{
+              display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+              background: 'var(--card)', border: '1px solid var(--border)',
+              borderRadius: 12, padding: '12px 16px',
+            }}>
               <div>
-                <p className="text-white font-semibold">{selectedFaculty.facultyName}</p>
-                <p className="text-gray-400 text-xs mt-0.5">
+                <p style={{ color: 'var(--text)', fontWeight: 600 }}>{selectedFaculty.facultyName}</p>
+                <p style={{ color: 'var(--muted)', fontSize: 12, marginTop: 2 }}>
                   {selectedFaculty.designation ?? ''}
                   {selectedFaculty.designation ? ' · ' : ''}
                   {selectedFaculty.college?.collegeName ?? ''}
                 </p>
                 {selectedFaculty.dataQualityFlag === 'PENDING_REVIEW' && (
-                  <span className="text-amber-400 text-[10px] font-semibold mt-1 block">⚠️ PENDING REVIEW</span>
+                  <span style={{ color: '#d97706', fontSize: 10, fontWeight: 600, marginTop: 4, display: 'block' }}>⚠️ PENDING REVIEW</span>
                 )}
               </div>
               <button onClick={() => setSelectedFaculty(null)}
-                className="text-gray-600 hover:text-white transition-colors text-xs ml-3">Change</button>
+                style={{ color: 'var(--faint)', fontSize: 13, background: 'none', border: 'none', cursor: 'pointer' }}>
+                Change
+              </button>
             </div>
           ) : (
-            <div className="relative">
+            <div style={{ position: 'relative' }}>
               <input className="input" value={facultySearch}
                 onChange={e => setFacultySearch(e.target.value)}
                 placeholder="Search faculty by name…" />
@@ -347,26 +364,51 @@ export default function CompRequestNew() {
               )}
               {/* Results dropdown */}
               {facultyResults.length > 0 && (
-                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111827] border border-white/12 rounded-xl shadow-2xl overflow-hidden">
+                <div style={{
+                  position: 'absolute', zIndex: 20, top: '100%', left: 0, right: 0, marginTop: 4,
+                  background: 'var(--card)', border: '1px solid var(--border)',
+                  borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,0.15)', overflow: 'hidden',
+                }}>
                   {facultyResults.map(f => (
                     <button key={f.facultyId} onClick={() => selectFaculty(f)}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-white/6 transition-colors text-left">
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '10px 16px', textAlign: 'left', background: 'none',
+                        border: 'none', cursor: 'pointer',
+                        transition: 'background 150ms',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                    >
                       <div>
-                        <p className="text-white text-sm font-medium">{f.facultyName}</p>
-                        <p className="text-gray-500 text-xs">{f.college?.collegeName} · {f.department?.deptName}</p>
+                        <p style={{ color: 'var(--text)', fontSize: 14, fontWeight: 500 }}>{f.facultyName}</p>
+                        <p style={{ color: 'var(--muted)', fontSize: 12 }}>{f.college?.collegeName} · {f.department?.deptName}</p>
                       </div>
                     </button>
                   ))}
                   <button onClick={() => setShowAddFaculty(true)}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-brand-red hover:bg-white/4 transition-colors text-sm border-t border-white/8">
+                    style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '10px 16px', color: '#D01D22', fontSize: 14,
+                      background: 'none', border: 'none', borderTop: '1px solid var(--border)',
+                      cursor: 'pointer',
+                    }}>
                     <span>＋</span> Add new faculty (not in system)
                   </button>
                 </div>
               )}
               {facultySearch.length > 2 && !facultyLoading && facultyResults.length === 0 && (
-                <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111827] border border-white/12 rounded-xl shadow-2xl overflow-hidden">
+                <div style={{
+                  position: 'absolute', zIndex: 20, top: '100%', left: 0, right: 0, marginTop: 4,
+                  background: 'var(--card)', border: '1px solid var(--border)',
+                  borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,0.15)', overflow: 'hidden',
+                }}>
                   <button onClick={() => setShowAddFaculty(true)}
-                    className="w-full flex items-center gap-2 px-4 py-3 text-brand-red hover:bg-white/4 transition-colors text-sm">
+                    style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '12px 16px', color: '#D01D22', fontSize: 14,
+                      background: 'none', border: 'none', cursor: 'pointer',
+                    }}>
                     <span>＋</span> No results — add "{facultySearch}" as new faculty
                   </button>
                 </div>
@@ -379,13 +421,13 @@ export default function CompRequestNew() {
         <Section title="Visit Details" icon="📅">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1.5">Visit Date *</label>
+              <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Visit Date *</label>
               <input className="input" type="date" value={requestDate}
                 onChange={e => setRequestDate(e.target.value)} max={today()} />
             </div>
           </div>
-          <div className="mt-3">
-            <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1.5">Visit Notes</label>
+          <div style={{ marginTop: 12 }}>
+            <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Visit Notes</label>
             <textarea className="input min-h-[72px] resize-none text-sm" value={visitNotes}
               onChange={e => setVisitNotes(e.target.value)}
               placeholder="Optional — notes from the conversation with faculty" />
@@ -394,10 +436,9 @@ export default function CompRequestNew() {
 
         {/* ── Section 3: Books ────────────────────────────────────────── */}
         <Section title="Books" icon="📚"
-          action={<span className="text-gray-600 text-xs">{lineItems.length} book{lineItems.length !== 1 ? 's' : ''} added</span>}>
-
+          action={<span style={{ color: 'var(--faint)', fontSize: 12 }}>{lineItems.length} book{lineItems.length !== 1 ? 's' : ''} added</span>}>
           {/* Book search */}
-          <div className="relative mb-4">
+          <div style={{ position: 'relative', marginBottom: 16 }}>
             <input className="input" value={bookSearch}
               onChange={e => setBookSearch(e.target.value)}
               placeholder="Search by title or subject to add books…" />
@@ -407,22 +448,36 @@ export default function CompRequestNew() {
               </div>
             )}
             {bookResults.length > 0 && (
-              <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-[#111827] border border-white/12 rounded-xl shadow-2xl overflow-hidden max-h-64 overflow-y-auto">
+              <div style={{
+                position: 'absolute', zIndex: 20, top: '100%', left: 0, right: 0, marginTop: 4,
+                background: 'var(--card)', border: '1px solid var(--border)',
+                borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+                maxHeight: '16rem', overflowY: 'auto',
+              }}>
                 {bookResults.map(book => {
                   const alreadyAdded = lineItems.some(li => li.bookId === book.bookId)
                   return (
                     <button key={book.bookId} onClick={() => addBook(book)} disabled={alreadyAdded}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors
-                        ${alreadyAdded ? 'opacity-40 cursor-not-allowed' : 'hover:bg-white/6'}`}>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white text-sm font-medium truncate">{book.title}</p>
-                        <p className="text-gray-500 text-xs truncate">
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                        padding: '10px 16px', textAlign: 'left',
+                        opacity: alreadyAdded ? 0.4 : 1,
+                        cursor: alreadyAdded ? 'not-allowed' : 'pointer',
+                        background: 'none', border: 'none',
+                        transition: 'background 150ms',
+                      }}
+                      onMouseEnter={e => { if (!alreadyAdded) e.currentTarget.style.background = 'var(--hover-bg)' }}
+                      onMouseLeave={e => { if (!alreadyAdded) e.currentTarget.style.background = 'none' }}
+                    >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ color: 'var(--text)', fontSize: 14, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{book.title}</p>
+                        <p style={{ color: 'var(--muted)', fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {book.authors?.map(a => a.authorName).join(', ')}
                           {book.edition ? ` · ${book.edition} Ed.` : ''}
                         </p>
                       </div>
-                      <span className="text-gray-600 text-xs flex-shrink-0">₹{book.mrp}</span>
-                      {alreadyAdded && <span className="text-emerald-500 text-xs flex-shrink-0">Added</span>}
+                      <span style={{ color: 'var(--muted)', fontSize: 12, flexShrink: 0 }}>₹{book.mrp}</span>
+                      {alreadyAdded && <span style={{ color: 'var(--success)', fontSize: 12, flexShrink: 0 }}>Added</span>}
                     </button>
                   )
                 })}
@@ -430,50 +485,63 @@ export default function CompRequestNew() {
             )}
           </div>
 
-          {/* Line items */}
+          {/* Empty state */}
           {lineItems.length === 0 && (
-            <div className="text-center py-6 border border-dashed border-white/10 rounded-xl">
-              <p className="text-gray-600 text-sm">Search above to add books to this request</p>
+            <div style={{
+              textAlign: 'center', padding: '24px', border: '1px dashed var(--border)', borderRadius: 12,
+            }}>
+              <p style={{ color: 'var(--faint)', fontSize: 14 }}>Search above to add books to this request</p>
             </div>
           )}
-          <div className="space-y-3">
+
+          {/* Line items */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {lineItems.map(li => (
-              <div key={li.tempId} className="bg-white/3 border border-white/8 rounded-xl p-3">
+              <div key={li.tempId} style={{
+                background: 'var(--card)', border: '1px solid var(--border)',
+                borderRadius: 12, padding: 12,
+              }}>
                 {/* Duplicate warning */}
                 {li.dupWarning && !li.dupOverride && (
-                  <div className="bg-amber-950/40 border border-amber-800/50 rounded-lg px-3 py-2 mb-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-amber-400 text-xs">
+                  <div style={{
+                    background: 'var(--warning-bg)', border: '1px solid var(--warning-border)',
+                    borderRadius: 8, padding: '8px 12px', marginBottom: 8,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                      <p style={{ color: 'var(--warning-text)', fontSize: 12 }}>
                         ⚠️ This book was comped to this faculty {li.dupWarning.daysAgo} days ago
                         ({li.dupWarning.lastRequestRef})
                       </p>
                       <button onClick={() => updateLine(li.tempId, 'dupOverride', true)}
-                        className="text-[10px] text-amber-600 hover:text-amber-400 whitespace-nowrap">
+                        style={{ color: 'var(--warning-text)', fontSize: 10, background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                         Acknowledge
                       </button>
                     </div>
                   </div>
                 )}
 
-                <div className="flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium text-sm truncate">{li.bookTitle}</p>
-                    <p className="text-gray-500 text-xs">
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: 'var(--text)', fontWeight: 500, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{li.bookTitle}</p>
+                    <p style={{ color: 'var(--muted)', fontSize: 12 }}>
                       {li.bookAuthors?.map(a => a.authorName).join(', ') || 'No authors'}
                     </p>
                   </div>
                   <button onClick={() => removeLine(li.tempId)}
-                    className="text-gray-600 hover:text-red-400 transition-colors text-sm flex-shrink-0">✕</button>
+                    style={{ color: 'var(--faint)', fontSize: 16, background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--danger)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--faint)'}
+                  >✕</button>
                 </div>
 
-                <div className="flex items-center gap-3 mt-2">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
                   {/* Quantity */}
-                  <div className="flex items-center gap-1 bg-white/6 rounded-lg p-0.5">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--input)', borderRadius: 8, padding: '2px' }}>
                     <button onClick={() => updateLine(li.tempId, 'quantity', Math.max(1, li.quantity - 1))}
-                      className="w-6 h-6 text-gray-400 hover:text-white transition-colors text-sm font-bold">−</button>
-                    <span className="text-white text-sm w-6 text-center font-mono">{li.quantity}</span>
+                      style={{ width: 24, height: 24, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 'bold' }}>−</button>
+                    <span style={{ color: 'var(--text)', fontSize: 14, width: 24, textAlign: 'center', fontFamily: 'monospace' }}>{li.quantity}</span>
                     <button onClick={() => updateLine(li.tempId, 'quantity', Math.min(5, li.quantity + 1))}
-                      className="w-6 h-6 text-gray-400 hover:text-white transition-colors text-sm font-bold">+</button>
+                      style={{ width: 24, height: 24, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 'bold' }}>+</button>
                   </div>
 
                   {/* Format */}
@@ -497,22 +565,22 @@ export default function CompRequestNew() {
 
         {/* ── Section 4: Dispatch ─────────────────────────────────────── */}
         <Section title="Dispatch Address" icon="📦">
-          <div className="flex gap-4 mb-3">
+          <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
             {[
               { value: 'college',   label: 'College address (default)' },
               { value: 'alternate', label: 'Alternate address' },
             ].map(opt => (
-              <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
+              <label key={opt.value} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                 <input type="radio" value={opt.value} checked={dispatchType === opt.value}
                   onChange={() => setDispatchType(opt.value)}
-                  className="accent-brand-red" />
-                <span className="text-gray-300 text-sm">{opt.label}</span>
+                  style={{ accentColor: '#D01D22' }} />
+                <span style={{ color: 'var(--text)', fontSize: 14 }}>{opt.label}</span>
               </label>
             ))}
           </div>
 
           {dispatchType === 'alternate' && (
-            <div className="space-y-2 mt-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <input className="input text-sm" value={altRecipient}
                 onChange={e => setAltRecipient(e.target.value)} placeholder="Recipient name" />
               <textarea className="input text-sm min-h-[60px] resize-none" value={altAddress}
@@ -528,17 +596,26 @@ export default function CompRequestNew() {
         </Section>
 
         {/* ── Actions ─────────────────────────────────────────────────── */}
-        <div className="flex gap-3 mt-6">
+        <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
           <button onClick={() => navigate('/requests')}
-            className="px-4 py-2.5 rounded-xl text-sm text-gray-500 hover:text-white hover:bg-white/6 transition-all">
-            Cancel
-          </button>
+            style={{
+              padding: '10px 16px', borderRadius: 12, fontSize: 14,
+              color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'var(--hover-bg)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'none' }}
+          >Cancel</button>
           <button onClick={() => handleSave(false)} disabled={saving}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium border border-white/20 text-gray-300 hover:text-white hover:bg-white/6 transition-all disabled:opacity-50">
-            {saving ? 'Saving…' : 'Save Draft'}
-          </button>
+            style={{
+              padding: '10px 20px', borderRadius: 12, fontSize: 14, fontWeight: 500,
+              color: 'var(--muted)', border: '1px solid var(--border)', background: 'none',
+              cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.5 : 1,
+            }}
+            onMouseEnter={e => { if (!saving) { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'var(--hover-bg)' }}}
+            onMouseLeave={e => { if (!saving) { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'none' }}}
+          >Save Draft</button>
           <button onClick={() => handleSave(true)} disabled={saving}
-            className="btn-primary px-6 py-2.5 text-sm ml-auto">
+            className="btn-primary" style={{ padding: '10px 24px', fontSize: 14, marginLeft: 'auto' }}>
             {saving ? 'Submitting…' : 'Submit Request →'}
           </button>
         </div>
@@ -559,11 +636,11 @@ export default function CompRequestNew() {
 // ---------------------------------------------------------------------------
 function Section({ title, icon, action, children }) {
   return (
-    <div className="card p-5 mb-4">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-base">{icon}</span>
-          <h2 className="text-white font-semibold text-sm font-display">{title}</h2>
+    <div className="card" style={{ padding: 20, marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 18 }}>{icon}</span>
+          <h2 style={{ color: 'var(--text)', fontWeight: 600, fontSize: 14, fontFamily: 'Sora, sans-serif' }}>{title}</h2>
         </div>
         {action}
       </div>
