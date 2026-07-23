@@ -16,23 +16,21 @@ const EMPTY_FORM = { deptName: '', collegeId: '' }
 
 export default function Departments() {
   const { hasRole } = useAuth()
-  const isAdmin     = hasRole('admin')
-
-  const [items,          setItems]          = useState([])
-  const [total,          setTotal]          = useState(0)
-  const [page,           setPage]           = useState(1)
-  const [pages,          setPages]          = useState(1)
-  const [loading,        setLoading]        = useState(true)
-  const [search,         setSearch]         = useState('')
-  const [filterCollege,  setFilterCollege]  = useState('')
+  const isAdmin = hasRole('admin')
+  const [items, setItems] = useState([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [filterCollege, setFilterCollege] = useState('')
   const debouncedSearch = useDebounce(search, 350)
-
-  const [colleges,   setColleges]   = useState([])
+  const [colleges, setColleges] = useState([])
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [editing,    setEditing]    = useState(null)
-  const [form,       setForm]       = useState(EMPTY_FORM)
-  const [saving,     setSaving]     = useState(false)
-  const [formError,  setFormError]  = useState('')
+  const [editing, setEditing] = useState(null)
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
   const [confirmRow, setConfirmRow] = useState(null)
 
   const fetchItems = useCallback(async () => {
@@ -40,8 +38,8 @@ export default function Departments() {
     try {
       const { data } = await departmentsApi.list({
         page, pageSize: 20,
-        search:    debouncedSearch || undefined,
-        collegeId: filterCollege   || undefined,
+        search: debouncedSearch || undefined,
+        collegeId: filterCollege || undefined,
       })
       setItems(data.items); setTotal(data.total); setPages(data.pages)
     } finally { setLoading(false) }
@@ -63,8 +61,8 @@ export default function Departments() {
   }
 
   async function handleSave() {
-    if (!form.deptName.trim())  { setFormError('Department name is required'); return }
-    if (!form.collegeId)         { setFormError('College is required'); return }
+    if (!form.deptName.trim()) { setFormError('Department name is required'); return }
+    if (!form.collegeId) { setFormError('College is required'); return }
     setFormError(''); setSaving(true)
     try {
       const payload = { deptName: form.deptName, collegeId: Number(form.collegeId) }
@@ -84,11 +82,11 @@ export default function Departments() {
   const columns = [
     {
       key: 'deptName', header: 'Department', sortable: true,
-      render: row => <span className="text-white font-medium">{row.deptName}</span>,
+      render: row => <span className="text-gray-900 dark:text-white font-medium">{row.deptName}</span>,
     },
     {
       key: 'college', header: 'College',
-      render: row => <span className="text-gray-400 text-xs">{row.college?.collegeName ?? '—'}</span>,
+      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.college?.collegeName ?? '—'}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-28',
@@ -105,7 +103,7 @@ export default function Departments() {
 
   return (
     <Layout>
-      <div className="p-6">
+      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
         <PageHeader
           title="Departments"
           subtitle={`${total} departments`}
@@ -128,25 +126,23 @@ export default function Departments() {
             placeholder="Search departments…" className="flex-1 min-w-[180px] max-w-xs" />
           <select value={filterCollege}
             onChange={e => { setFilterCollege(e.target.value); setPage(1) }}
-            className="input w-56 text-sm">
+            className="input w-56 text-sm bg-white dark:bg-[#0e1424] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
             <option value="">All colleges</option>
             {colleges.map(c => (
               <option key={c.collegeId} value={c.collegeId}>{c.collegeName}</option>
             ))}
           </select>
         </div>
-
         <DataTable columns={columns} rows={items} actions={rowActions}
           keyField="deptId" loading={loading}
           emptyNode={<EmptyState icon="📂" title="No departments found" />} />
         <PaginationBar page={page} pages={pages} total={total} pageSize={20} onPage={setPage} />
       </div>
-
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Department' : 'Add Department'}
         onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-400 text-sm">
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
             {formError}
           </div>
         )}
@@ -164,7 +160,6 @@ export default function Departments() {
             placeholder="e.g. Department of Commerce" />
         </Field>
       </FormModal>
-
       <ConfirmDialog open={Boolean(confirmRow)} title="Deactivate Department"
         message={`Deactivate "${confirmRow?.deptName}"?`}
         onConfirm={() => handleDeactivate(confirmRow)} onCancel={() => setConfirmRow(null)} />
