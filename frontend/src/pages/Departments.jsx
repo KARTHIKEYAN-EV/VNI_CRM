@@ -82,11 +82,11 @@ export default function Departments() {
   const columns = [
     {
       key: 'deptName', header: 'Department', sortable: true,
-      render: row => <span className="text-gray-900 dark:text-white font-medium">{row.deptName}</span>,
+      render: row => <span style={{ color: 'var(--text)', fontWeight: 500 }}>{row.deptName}</span>,
     },
     {
       key: 'college', header: 'College',
-      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.college?.collegeName ?? '—'}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.college?.collegeName ?? '—'}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-28',
@@ -103,7 +103,8 @@ export default function Departments() {
 
   return (
     <Layout>
-      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
+      {/* Transparent background to show the ambient starfield */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader
           title="Departments"
           subtitle={`${total} departments`}
@@ -124,9 +125,10 @@ export default function Departments() {
         <div className="flex flex-wrap gap-3 mb-5">
           <SearchInput value={search} onChange={v => { setSearch(v); setPage(1) }}
             placeholder="Search departments…" className="flex-1 min-w-[180px] max-w-xs" />
+          {/* The select uses the `.input` class which already respects theme via CSS variables */}
           <select value={filterCollege}
             onChange={e => { setFilterCollege(e.target.value); setPage(1) }}
-            className="input w-56 text-sm bg-white dark:bg-[#0e1424] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white">
+            className="input w-56 text-sm">
             <option value="">All colleges</option>
             {colleges.map(c => (
               <option key={c.collegeId} value={c.collegeId}>{c.collegeName}</option>
@@ -142,7 +144,15 @@ export default function Departments() {
         title={editing ? 'Edit Department' : 'Add Department'}
         onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
+          <div style={{
+            backgroundColor: 'var(--error-bg)',
+            border: '1px solid var(--error-border)',
+            borderRadius: 12,
+            padding: '12px 16px',
+            marginBottom: 16,
+            color: 'var(--error-text)',
+            fontSize: 13,
+          }}>
             {formError}
           </div>
         )}
