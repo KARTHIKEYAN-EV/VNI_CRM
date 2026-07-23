@@ -163,7 +163,71 @@
 
   --vignette-gradient: radial-gradient(ellipse 120% 120% at 50% 50%, transparent 45%, rgba(5,8,15,0.7) 100%);
 }
+:root {
+  /* Phase status colours (light mode) */
+  --phase-done-bg:           rgba(16,185,129,0.08);
+  --phase-done-bg-hover:     rgba(16,185,129,0.14);
+  --phase-done-border:       rgba(16,185,129,0.15);
+  --phase-done-border-hover: rgba(16,185,129,0.3);
+  --phase-done-text:         #047857;  /* deep green */
+  --phase-done-dot:          #10b981;
+  --phase-done-accent:       #047857;
+  --phase-done-badge-bg:     rgba(16,185,129,0.15);
+  --phase-done-badge-text:   #047857;
+  --phase-done-badge-border: rgba(16,185,129,0.25);
 
+  --phase-next-bg:           rgba(245,158,11,0.08);
+  --phase-next-bg-hover:     rgba(245,158,11,0.14);
+  --phase-next-border:       rgba(245,158,11,0.15);
+  --phase-next-border-hover: rgba(245,158,11,0.3);
+  --phase-next-text:         #b45309;  /* deep amber */
+  --phase-next-dot:          #fbbf24;
+  --phase-next-accent:       #b45309;
+  --phase-next-badge-bg:     rgba(245,158,11,0.15);
+  --phase-next-badge-text:   #b45309;
+  --phase-next-badge-border: rgba(245,158,11,0.25);
+
+  --phase-pending-bg:        rgba(148,163,184,0.06);
+  --phase-pending-bg-hover:  rgba(148,163,184,0.12);
+  --phase-pending-border:    rgba(148,163,184,0.1);
+  --phase-pending-text:      #64748b;  /* muted */
+  --phase-pending-dot:       #94a3b8;
+  --phase-pending-accent:    #64748b;
+  --phase-items-text:        #475569;  /* slightly darker for readability */
+}
+
+.dark {
+  /* Phase status colours (dark mode – original look) */
+  --phase-done-bg:           rgba(5,46,37,0.25);
+  --phase-done-bg-hover:     rgba(5,46,37,0.45);
+  --phase-done-border:       rgba(16,185,129,0.12);
+  --phase-done-border-hover: rgba(16,185,129,0.25);
+  --phase-done-text:         #6ee7b7;
+  --phase-done-dot:          #10b981;
+  --phase-done-accent:       #6ee7b7;
+  --phase-done-badge-bg:     rgba(16,185,129,0.15);
+  --phase-done-badge-text:   #34d399;
+  --phase-done-badge-border: rgba(16,185,129,0.25);
+
+  --phase-next-bg:           rgba(69,48,8,0.3);
+  --phase-next-bg-hover:     rgba(69,48,8,0.5);
+  --phase-next-border:       rgba(245,158,11,0.12);
+  --phase-next-border-hover: rgba(245,158,11,0.25);
+  --phase-next-text:         #fde68a;
+  --phase-next-dot:          #fbbf24;
+  --phase-next-accent:       #fde68a;
+  --phase-next-badge-bg:     rgba(245,158,11,0.15);
+  --phase-next-badge-text:   #fbbf24;
+  --phase-next-badge-border: rgba(245,158,11,0.25);
+
+  --phase-pending-bg:        rgba(255,255,255,0.02);
+  --phase-pending-bg-hover:  rgba(255,255,255,0.04);
+  --phase-pending-border:    rgba(255,255,255,0.04);
+  --phase-pending-text:      #334155;
+  --phase-pending-dot:       #334155;
+  --phase-pending-accent:    #334155;
+  --phase-items-text:        #334155;
+}
 /* ─── RESET / BASE ───────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
