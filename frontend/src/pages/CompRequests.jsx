@@ -2,39 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import DataTable from '../components/DataTable'
-import { PageHeader, EmptyState, PaginationBar, SearchInput } from '../components/ui'
+import { PageHeader, EmptyState, PaginationBar, SearchInput, StatusBadge } from '../components/ui'
 import { compRequestsApi } from '../api/comp_requests'
 import useDebounce from '../hooks/useDebounce'
 import { useAuth } from '../auth/AuthContext'
-
-// Status colours
-const STATUS_MAP = {
-  DRAFT:             { bg: 'rgba(17,24,39,0.8)',  border: 'rgba(55,65,81,0.5)',    text: '#9ca3af', dot: '#6b7280' },
-  SUBMITTED:         { bg: 'rgba(7,89,133,0.4)',  border: 'rgba(56,189,248,0.2)',  text: '#7dd3fc', dot: '#38bdf8' },
-  APPROVED:          { bg: 'rgba(6,78,59,0.4)',   border: 'rgba(52,211,153,0.2)',  text: '#6ee7b7', dot: '#34d399' },
-  REJECTED:          { bg: 'rgba(69,10,10,0.4)',  border: 'rgba(248,113,113,0.2)', text: '#fca5a5', dot: '#f87171' },
-  DISPATCHED:        { bg: 'rgba(59,7,100,0.4)',  border: 'rgba(192,132,252,0.2)', text: '#d8b4fe', dot: '#c084fc' },
-  DELIVERED:         { bg: 'rgba(19,78,74,0.4)',  border: 'rgba(45,212,191,0.2)',  text: '#99f6e4', dot: '#2dd4bf' },
-  ADOPTED:           { bg: 'rgba(6,78,59,0.55)',  border: 'rgba(52,211,153,0.25)', text: '#a7f3d0', dot: '#34d399' },
-  NOT_ADOPTED:       { bg: 'rgba(67,20,7,0.4)',   border: 'rgba(251,146,60,0.2)',  text: '#fed7aa', dot: '#fb923c' },
-  PENDING_FOLLOW_UP: { bg: 'rgba(78,63,7,0.4)',   border: 'rgba(251,191,36,0.2)',  text: '#fde68a', dot: '#fbbf24' },
-  CANCELLED:         { bg: 'rgba(17,24,39,0.5)',  border: 'rgba(55,65,81,0.3)',    text: '#6b7280', dot: '#374151' },
-}
-
-function StatusChip({ value }) {
-  const s = STATUS_MAP[value] ?? { bg: 'rgba(17,24,39,0.7)', border: 'rgba(55,65,81,0.4)', text: '#9ca3af', dot: '#6b7280' }
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: 5,
-      padding: '3px 8px', borderRadius: 6,
-      background: s.bg, border: `1px solid ${s.border}`,
-      color: s.text, fontSize: 11, fontWeight: 600, whiteSpace: 'nowrap',
-    }}>
-      <span style={{ width: 5, height: 5, borderRadius: '50%', background: s.dot, flexShrink: 0 }} />
-      {value?.replace(/_/g, ' ')}
-    </span>
-  )
-}
 
 const STATUS_TABS = [
   { label: 'All',       value: '' },
@@ -81,7 +52,7 @@ export default function CompRequests() {
     {
       key: 'requestRef', header: 'Reference', sortable: true, width: 'w-40',
       render: row => (
-        <span className="text-brand-blue font-mono text-xs font-semibold">
+        <span style={{ color: 'var(--blue)', fontFamily: 'JetBrains Mono, monospace', fontSize: 12, fontWeight: 600 }}>
           {row.requestRef}
         </span>
       ),
@@ -90,30 +61,32 @@ export default function CompRequests() {
       key: 'faculty', header: 'Faculty',
       render: row => (
         <div>
-          <p className="text-white font-medium text-sm">{row.faculty?.facultyName ?? '—'}</p>
-          <p className="text-gray-500 text-xs">{row.college?.collegeName ?? '—'}</p>
+          <p style={{ color: 'var(--text)', fontWeight: 500, fontSize: 14 }}>{row.faculty?.facultyName ?? '—'}</p>
+          <p style={{ color: 'var(--muted)', fontSize: 12 }}>{row.college?.collegeName ?? '—'}</p>
         </div>
       ),
     },
     {
       key: 'lineItems', header: 'Books', width: 'w-20',
       render: row => (
-        <span className="text-gray-400 text-xs font-mono">{row.lineItems?.length ?? 0}</span>
+        <span style={{ color: 'var(--muted)', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>
+          {row.lineItems?.length ?? 0}
+        </span>
       ),
     },
     {
       key: 'rep', header: 'Rep', width: 'w-36',
       render: row => (
-        <span className="text-gray-400 text-xs">{row.rep?.fullName ?? '—'}</span>
+        <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.rep?.fullName ?? '—'}</span>
       ),
     },
     {
       key: 'requestDate', header: 'Visit Date', sortable: true, width: 'w-32',
-      render: row => <span className="text-gray-400 text-xs">{row.requestDate}</span>,
+      render: row => <span style={{ color: 'var(--muted)', fontSize: 12 }}>{row.requestDate}</span>,
     },
     {
       key: 'status', header: 'Status', width: 'w-40',
-      render: row => <StatusChip value={row.status} />,
+      render: row => <StatusBadge value={row.status} />,
     },
   ]
 
@@ -126,7 +99,8 @@ export default function CompRequests() {
 
   return (
     <Layout>
-      <div className="p-4 md:p-6">
+      {/* Transparent background – shows ambient starfield */}
+      <div style={{ padding: '1.5rem', minHeight: '100vh', background: 'transparent' }}>
         <PageHeader
           title="Comp Requests"
           subtitle={`${total} total`}
@@ -147,13 +121,23 @@ export default function CompRequests() {
                 style={{
                   padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
                   whiteSpace: 'nowrap', flexShrink: 0, cursor: 'pointer',
-                  background: active ? 'rgba(208,29,34,0.15)' : 'transparent',
-                  color: active ? '#fff' : '#6b7280',
-                  border: `1px solid ${active ? 'rgba(208,29,34,0.35)' : 'transparent'}`,
+                  background: active ? 'var(--tab-active-bg)' : 'transparent',
+                  color: active ? 'var(--tab-active-text)' : 'var(--muted)',
+                  border: `1px solid ${active ? 'var(--tab-active-border)' : 'transparent'}`,
                   transition: 'background 150ms ease, color 150ms ease, border-color 150ms ease',
                 }}
-                onMouseEnter={e => { if (!active) { e.currentTarget.style.color = '#d1d5db'; e.currentTarget.style.background = 'rgba(255,255,255,0.05)' } }}
-                onMouseLeave={e => { if (!active) { e.currentTarget.style.color = '#6b7280'; e.currentTarget.style.background = 'transparent' } }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    e.currentTarget.style.color = 'var(--text)';
+                    e.currentTarget.style.background = 'var(--hover-bg)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    e.currentTarget.style.color = 'var(--muted)';
+                    e.currentTarget.style.background = 'transparent';
+                  }
+                }}
               >
                 {tab.label}
               </button>
@@ -168,7 +152,7 @@ export default function CompRequests() {
           <div className="flex items-center gap-2">
             <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
               className="input text-sm flex-1 sm:w-36" placeholder="From" />
-            <span className="text-gray-600 text-xs flex-shrink-0">–</span>
+            <span style={{ color: 'var(--faint)', fontSize: 12, flexShrink: 0 }}>–</span>
             <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
               className="input text-sm flex-1 sm:w-36" placeholder="To" />
           </div>
