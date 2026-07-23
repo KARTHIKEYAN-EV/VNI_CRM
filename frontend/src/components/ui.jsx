@@ -39,7 +39,6 @@ export function PageHeader({ title, subtitle, action }) {
 }
 
 // ── Status badges ────────────────────────────────────────────────────────────
-// Values defined as CSS custom properties in index.css
 const BADGE_MAP = {
   VERIFIED:       { bgVar: '--badge-verified-bg',       borderVar: '--badge-verified-border',       textVar: '--badge-verified-text',       dotVar: '--badge-verified-dot' },
   PENDING_REVIEW: { bgVar: '--badge-pending-bg',         borderVar: '--badge-pending-border',         textVar: '--badge-pending-text',         dotVar: '--badge-pending-dot' },
