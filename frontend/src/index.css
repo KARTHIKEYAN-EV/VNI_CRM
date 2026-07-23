@@ -383,6 +383,19 @@
   --warning-border:rgba(245,158,11,0.3);
   --warning-text:  #fde68a;
 }
+:root {
+  /* ... existing light variables ... */
+  --tab-active-bg:     rgba(208,29,34,0.1);
+  --tab-active-text:   #b91c1c;
+  --tab-active-border: rgba(208,29,34,0.25);
+}
+
+.dark {
+  /* ... existing dark variables ... */
+  --tab-active-bg:     rgba(208,29,34,0.15);
+  --tab-active-text:   #ffffff;
+  --tab-active-border: rgba(208,29,34,0.35);
+}
 /* ─── RESET / BASE ───────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
