@@ -47,6 +47,17 @@ const BADGE_MAP = {
   Physical:       { bgVar: '--badge-physical-bg',        borderVar: '--badge-physical-border',        textVar: '--badge-physical-text',        dotVar: '--badge-physical-dot' },
   Digital:        { bgVar: '--badge-digital-bg',         borderVar: '--badge-digital-border',         textVar: '--badge-digital-text',         dotVar: '--badge-digital-dot' },
   Both:           { bgVar: '--badge-both-bg',            borderVar: '--badge-both-border',            textVar: '--badge-both-text',            dotVar: '--badge-both-dot' },
+  // inside BADGE_MAP of ui.jsx
+DRAFT:             { bgVar: '--status-draft-bg',             borderVar: '--status-draft-border',             textVar: '--status-draft-text',             dotVar: '--status-draft-dot' },
+SUBMITTED:         { bgVar: '--status-submitted-bg',         borderVar: '--status-submitted-border',         textVar: '--status-submitted-text',         dotVar: '--status-submitted-dot' },
+APPROVED:          { bgVar: '--status-approved-bg',          borderVar: '--status-approved-border',          textVar: '--status-approved-text',          dotVar: '--status-approved-dot' },
+REJECTED:          { bgVar: '--status-rejected-bg',          borderVar: '--status-rejected-border',          textVar: '--status-rejected-text',          dotVar: '--status-rejected-dot' },
+DISPATCHED:        { bgVar: '--status-dispatched-bg',        borderVar: '--status-dispatched-border',        textVar: '--status-dispatched-text',        dotVar: '--status-dispatched-dot' },
+DELIVERED:         { bgVar: '--status-delivered-bg',         borderVar: '--status-delivered-border',         textVar: '--status-delivered-text',         dotVar: '--status-delivered-dot' },
+ADOPTED:           { bgVar: '--status-adopted-bg',           borderVar: '--status-adopted-border',           textVar: '--status-adopted-text',           dotVar: '--status-adopted-dot' },
+NOT_ADOPTED:       { bgVar: '--status-not-adopted-bg',       borderVar: '--status-not-adopted-border',       textVar: '--status-not-adopted-text',       dotVar: '--status-not-adopted-dot' },
+PENDING_FOLLOW_UP: { bgVar: '--status-pending-follow-bg',    borderVar: '--status-pending-follow-border',    textVar: '--status-pending-follow-text',    dotVar: '--status-pending-follow-dot' },
+CANCELLED:         { bgVar: '--status-cancelled-bg',         borderVar: '--status-cancelled-border',         textVar: '--status-cancelled-text',         dotVar: '--status-cancelled-dot' },
 }
 
 export function StatusBadge({ value }) {
