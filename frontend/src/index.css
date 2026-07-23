@@ -396,6 +396,35 @@
   --tab-active-text:   #ffffff;
   --tab-active-border: rgba(208,29,34,0.35);
 }
+:root {
+  /* ... existing light variables ... */
+  --course-type-ug-bg:     rgba(14,165,233,0.12);
+  --course-type-ug-text:   #0c4a6e;
+  --course-type-ug-border: rgba(14,165,233,0.3);
+
+  --course-type-pg-bg:     rgba(168,85,247,0.12);
+  --course-type-pg-text:   #4a1d96;
+  --course-type-pg-border: rgba(168,85,247,0.3);
+
+  --course-type-other-bg:  rgba(107,114,128,0.08);
+  --course-type-other-text:#374151;
+  --course-type-other-border: rgba(107,114,128,0.25);
+}
+
+.dark {
+  /* ... existing dark variables ... */
+  --course-type-ug-bg:     rgba(7,89,133,0.5);
+  --course-type-ug-text:   #7dd3fc;
+  --course-type-ug-border: rgba(56,189,248,0.25);
+
+  --course-type-pg-bg:     rgba(59,7,100,0.5);
+  --course-type-pg-text:   #d8b4fe;
+  --course-type-pg-border: rgba(192,132,252,0.25);
+
+  --course-type-other-bg:  rgba(17,24,39,0.8);
+  --course-type-other-text:#6b7280;
+  --course-type-other-border: rgba(55,65,81,0.5);
+}
 /* ─── RESET / BASE ───────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
