@@ -1,43 +1,29 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Layout from '../components/Layout'
-import { Spinner } from '../components/ui'
+import { Spinner, StatusBadge } from '../components/ui'
 import { compRequestsApi, workflowApi } from '../api/comp_requests'
 import { useAuth } from '../auth/AuthContext'
 import SendFormModal from '../components/SendFormModal'
 
-const STATUS_STYLE = {
-  DRAFT:             'bg-gray-900      text-gray-400   border-gray-700',
-  SUBMITTED:         'bg-blue-950/60   text-blue-400   border-blue-800/50',
-  APPROVED:          'bg-emerald-950/60 text-emerald-400 border-emerald-800/50',
-  REJECTED:          'bg-red-950/60    text-red-400    border-red-800/50',
-  DISPATCHED:        'bg-purple-950/60 text-purple-400  border-purple-800/50',
-  DELIVERED:         'bg-teal-950/60   text-teal-400   border-teal-800/50',
-  ADOPTED:           'bg-emerald-950/80 text-emerald-300 border-emerald-700/50',
-  NOT_ADOPTED:       'bg-orange-950/60 text-orange-400  border-orange-800/50',
-  PENDING_FOLLOW_UP: 'bg-amber-950/60  text-amber-400   border-amber-800/50',
-  CANCELLED:         'bg-gray-900      text-gray-600    border-gray-800',
-}
-function StatusChip({ value }) {
-  const s = STATUS_STYLE[value] ?? 'bg-gray-900 text-gray-500 border-gray-800'
-  return <span className={`inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-bold ${s}`}>{value?.replace(/_/g,' ')}</span>
-}
-function InfoRow({ label, value }) {
-  return (
-    <div className="flex justify-between items-baseline py-2 border-b border-white/5 last:border-0">
-      <span className="text-gray-500 text-xs uppercase tracking-wider">{label}</span>
-      <span className="text-white text-sm text-right max-w-[65%]">{value ?? '—'}</span>
-    </div>
-  )
-}
 function Ts({ value }) {
   if (!value) return '—'
   return new Date(value).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
 }
 
-// ---------------------------------------------------------------------------
-// Rejection modal (CEO)
-// ---------------------------------------------------------------------------
+function InfoRow({ label, value }) {
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+      padding: '8px 0', borderBottom: '1px solid var(--border)',
+    }}>
+      <span style={{ color: 'var(--muted)', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+      <span style={{ color: 'var(--text)', fontSize: 14, textAlign: 'right', maxWidth: '65%' }}>{value ?? '—'}</span>
+    </div>
+  )
+}
+
+/* ── Rejection modal (CEO) ──────────────────────────────────────────────── */
 function RejectModal({ open, onClose, onConfirm, reasons }) {
   const [code, setCode]   = useState('')
   const [notes, setNotes] = useState('')
@@ -60,10 +46,10 @@ function RejectModal({ open, onClose, onConfirm, reasons }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative card p-6 w-full max-w-sm shadow-2xl">
-        <h3 className="text-white font-semibold font-display mb-4">Reject Request</h3>
-        {err && <p className="text-red-400 text-sm mb-3">{err}</p>}
-        <label className="block text-[11px] text-gray-400 uppercase tracking-widest mb-1.5">Reason *</label>
+      <div className="card p-6 w-full max-w-sm shadow-2xl" style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16 }}>
+        <h3 style={{ color: 'var(--text)', fontWeight: 600, fontFamily: 'Sora, sans-serif', marginBottom: 16 }}>Reject Request</h3>
+        {err && <p style={{ color: 'var(--error-text)', fontSize: 13, marginBottom: 12 }}>{err}</p>}
+        <label style={{ display: 'block', color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Reason *</label>
         <select className="input text-sm mb-3" value={code} onChange={e => setCode(e.target.value)}>
           <option value="">Select reason…</option>
           {reasons.map(r => <option key={r.reasonCode} value={r.reasonCode}>{r.reasonLabel}</option>)}
@@ -72,10 +58,15 @@ function RejectModal({ open, onClose, onConfirm, reasons }) {
           <textarea className="input text-sm min-h-[64px] resize-none mb-3"
             value={notes} onChange={e => setNotes(e.target.value)} placeholder="Please specify…" />
         )}
-        <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-3 py-1.5 text-sm text-gray-500 hover:text-white">Cancel</button>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+          <button onClick={onClose} style={{ color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>Cancel</button>
           <button onClick={go} disabled={busy}
-            className="px-4 py-1.5 rounded-xl text-sm font-medium bg-red-900/60 text-red-300 border border-red-800/50 hover:bg-red-800/60 disabled:opacity-50">
+            style={{
+              padding: '8px 16px', borderRadius: 12, fontSize: 13, fontWeight: 500,
+              background: 'var(--error-bg)', color: 'var(--error-text)',
+              border: '1px solid var(--error-border)', cursor: busy ? 'not-allowed' : 'pointer',
+              opacity: busy ? 0.5 : 1,
+            }}>
             {busy ? 'Rejecting…' : 'Reject'}
           </button>
         </div>
@@ -84,9 +75,7 @@ function RejectModal({ open, onClose, onConfirm, reasons }) {
   )
 }
 
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
+/* ── Main ───────────────────────────────────────────────────────────────── */
 export default function CompRequestDetail() {
   const { id }            = useParams()
   const navigate          = useNavigate()
@@ -117,13 +106,12 @@ export default function CompRequestDetail() {
   }
 
   if (loading) return <Layout><div className="flex justify-center h-64 items-center"><Spinner size={32} /></div></Layout>
-  if (!request) return <Layout><div className="p-6 text-gray-500">Not found</div></Layout>
+  if (!request) return <Layout><div style={{ padding: '1.5rem', color: 'var(--muted)' }}>Not found</div></Layout>
 
   const s          = request.status
   const isMyRequest = request.repId === user?.userId
   const canManage  = hasRole('admin','manager','ceo') || isMyRequest
 
-  // Which actions to show
   const showEdit     = s === 'DRAFT'  && canManage
   const showSubmit   = s === 'DRAFT'  && canManage && request.lineItems?.length > 0
   const showCancel   = ['DRAFT','SUBMITTED'].includes(s) && canManage
@@ -133,88 +121,115 @@ export default function CompRequestDetail() {
   const showDeliver  = s === 'DISPATCHED' && hasRole('back_office','admin')
   const showAdoption = ['DELIVERED','PENDING_FOLLOW_UP'].includes(s) && canManage
 
+  // Helper styles for action buttons – using accent colours that remain visible on both themes
+  const accentStyle = (accentVar) => ({
+    background: `var(${accentVar}-bg)`,
+    color: `var(${accentVar}-text)`,
+    border: `1px solid var(${accentVar}-border)`,
+  })
+
   return (
     <Layout>
-      <div className="p-4 md:p-6 max-w-3xl">
+      {/* Transparent background – shows starfield */}
+      <div style={{ padding: '1.5rem', maxWidth: '48rem', minHeight: '100vh', background: 'transparent' }}>
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6 flex-wrap">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
           <button onClick={() => navigate('/requests')}
-            className="text-gray-500 hover:text-white text-sm">← Back</button>
-          <h1 className="text-xl font-bold text-white font-display font-mono">{request.requestRef}</h1>
-          <StatusChip value={s} />
+            style={{ color: 'var(--muted)', fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+            ← Back
+          </button>
+          <h1 style={{ color: 'var(--text)', fontSize: 20, fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>
+            {request.requestRef}
+          </h1>
+          <StatusBadge value={s} />
         </div>
 
         {err && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-400 text-sm">{err}</div>
+          <div style={{
+            background: 'var(--error-bg)', border: '1px solid var(--error-border)',
+            borderRadius: 12, padding: '12px 16px', marginBottom: 16,
+            color: 'var(--error-text)', fontSize: 13,
+          }}>
+            {err}
+          </div>
         )}
 
         {/* Action bar */}
         {(showEdit||showSubmit||showCancel||showApprove||showReject||showDispatch||showDeliver||showAdoption) && (
-          <div className="flex flex-wrap gap-2 mb-5 p-3 bg-white/3 border border-white/8 rounded-xl">
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20,
+            padding: 12, background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12,
+          }}>
             {showEdit && (
               <button onClick={() => navigate(`/requests/${id}/edit`)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/20 text-gray-300 hover:text-white hover:bg-white/8 transition-all">
+                style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
+                  background: 'transparent', color: 'var(--muted)', border: '1px solid var(--border)',
+                  cursor: 'pointer', transition: 'all 150ms' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'var(--hover-bg)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'transparent' }}
+              >
                 ✏️ Edit Draft
               </button>
             )}
             {showEdit && (
               <button onClick={() => setSendFormOpen(true)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/20 text-gray-300 hover:text-white hover:bg-white/8 transition-all">
+                style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
+                  background: 'transparent', color: 'var(--muted)', border: '1px solid var(--border)',
+                  cursor: 'pointer', transition: 'all 150ms' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.background = 'var(--hover-bg)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'transparent' }}
+              >
                 💬 Send to Faculty
               </button>
             )}
             {showSubmit && (
-              <button onClick={() => action(() => compRequestsApi.submit(id), 'submit')}
-                disabled={!!acting}
-                className="btn-primary px-4 py-1.5 text-xs">
+              <button onClick={() => action(() => compRequestsApi.submit(id), 'submit')} disabled={!!acting}
+                className="btn-primary" style={{ padding: '6px 16px', fontSize: 12 }}>
                 {acting === 'submit' ? 'Submitting…' : 'Submit →'}
               </button>
             )}
             {showApprove && (
-              <button onClick={() => action(() => workflowApi.approve(id), 'approve')}
-                disabled={!!acting}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/60 text-emerald-300 border border-emerald-800/50 hover:bg-emerald-800/60 transition-all disabled:opacity-50">
+              <button onClick={() => action(() => workflowApi.approve(id), 'approve')} disabled={!!acting}
+                style={{ ...accentStyle('--accent-emerald'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                 {acting === 'approve' ? 'Approving…' : '✓ Approve'}
               </button>
             )}
             {showReject && (
               <button onClick={() => setRejectOpen(true)} disabled={!!acting}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold text-red-400 border border-red-900/50 hover:bg-red-950/30 transition-all disabled:opacity-50">
+                style={{ ...accentStyle('--accent-red'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                 ✗ Reject
               </button>
             )}
             {showDispatch && (
-              <button onClick={() => action(() => workflowApi.dispatch(id), 'dispatch')}
-                disabled={!!acting}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-purple-900/60 text-purple-300 border border-purple-800/50 hover:bg-purple-800/60 transition-all disabled:opacity-50">
+              <button onClick={() => action(() => workflowApi.dispatch(id), 'dispatch')} disabled={!!acting}
+                style={{ ...accentStyle('--accent-purple'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                 {acting === 'dispatch' ? 'Updating…' : '📦 Mark Dispatched'}
               </button>
             )}
             {showDeliver && (
-              <button onClick={() => action(() => workflowApi.deliver(id), 'deliver')}
-                disabled={!!acting}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-teal-900/60 text-teal-300 border border-teal-800/50 hover:bg-teal-800/60 transition-all disabled:opacity-50">
+              <button onClick={() => action(() => workflowApi.deliver(id), 'deliver')} disabled={!!acting}
+                style={{ ...accentStyle('--accent-teal'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                 {acting === 'deliver' ? 'Updating…' : '🏠 Confirm Delivered'}
               </button>
             )}
             {showAdoption && (
               <>
-                <button onClick={() => action(() => workflowApi.markAdoption(id, true), 'adopted')}
-                  disabled={!!acting}
-                  className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/60 text-emerald-300 border border-emerald-800/50 hover:bg-emerald-800/60 transition-all disabled:opacity-50">
+                <button onClick={() => action(() => workflowApi.markAdoption(id, true), 'adopted')} disabled={!!acting}
+                  style={{ ...accentStyle('--accent-emerald'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                   {acting === 'adopted' ? 'Marking…' : '✓ Adopted'}
                 </button>
-                <button onClick={() => action(() => workflowApi.markAdoption(id, false), 'not-adopted')}
-                  disabled={!!acting}
-                  className="px-4 py-1.5 rounded-lg text-xs font-semibold text-orange-400 border border-orange-900/50 hover:bg-orange-950/30 transition-all disabled:opacity-50">
+                <button onClick={() => action(() => workflowApi.markAdoption(id, false), 'not-adopted')} disabled={!!acting}
+                  style={{ ...accentStyle('--accent-orange'), padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                   {acting === 'not-adopted' ? 'Marking…' : '✗ Not Adopted'}
                 </button>
               </>
             )}
             {showCancel && (
-              <button onClick={() => action(() => compRequestsApi.cancel(id), 'cancel')}
-                disabled={!!acting}
-                className="px-3 py-1.5 rounded-lg text-xs text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-all ml-auto">
+              <button onClick={() => action(() => compRequestsApi.cancel(id), 'cancel')} disabled={!!acting}
+                style={{ marginLeft: 'auto', padding: '6px 12px', borderRadius: 8, fontSize: 12, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--danger)'; e.currentTarget.style.background = 'var(--error-bg)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.background = 'none' }}
+              >
                 Cancel Request
               </button>
             )}
@@ -223,46 +238,49 @@ export default function CompRequestDetail() {
 
         {/* Rejection info */}
         {s === 'REJECTED' && (
-          <div className="bg-red-950/30 border border-red-900/40 rounded-xl px-4 py-3 mb-4">
-            <p className="text-red-400 text-xs font-semibold mb-0.5">Request Rejected</p>
-            <p className="text-red-300 text-sm">{request.rejectionReason?.replace(/_/g,' ')}</p>
-            {request.rejectionNotes && <p className="text-red-400/70 text-xs mt-1">{request.rejectionNotes}</p>}
+          <div style={{
+            background: 'var(--error-bg)', border: '1px solid var(--error-border)',
+            borderRadius: 12, padding: '12px 16px', marginBottom: 16,
+          }}>
+            <p style={{ color: 'var(--error-text)', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Request Rejected</p>
+            <p style={{ color: 'var(--error-text)', fontSize: 14 }}>{request.rejectionReason?.replace(/_/g,' ')}</p>
+            {request.rejectionNotes && <p style={{ color: 'var(--muted)', fontSize: 12, marginTop: 4 }}>{request.rejectionNotes}</p>}
           </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          {/* Faculty */}
+          {/* Faculty card */}
           <div className="card p-4">
-            <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">Faculty</p>
-            <p className="text-white font-semibold">{request.faculty?.facultyName ?? '—'}</p>
-            <p className="text-gray-400 text-xs mt-0.5">{request.faculty?.designation}</p>
-            <p className="text-gray-500 text-xs mt-1.5">{request.college?.collegeName}</p>
-            <p className="text-gray-500 text-xs">{request.department?.deptName}</p>
+            <p style={{ color: 'var(--muted)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Faculty</p>
+            <p style={{ color: 'var(--text)', fontWeight: 600 }}>{request.faculty?.facultyName ?? '—'}</p>
+            <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>{request.faculty?.designation}</p>
+            <p style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8 }}>{request.college?.collegeName}</p>
+            <p style={{ color: 'var(--muted)', fontSize: 12 }}>{request.department?.deptName}</p>
             {request.faculty?.phonePersonal && (
-              <p className="text-gray-400 text-xs mt-2 font-mono">📞 {request.faculty.phonePersonal}</p>
+              <p style={{ color: 'var(--muted)', fontSize: 12, marginTop: 8, fontFamily: 'monospace' }}>📞 {request.faculty.phonePersonal}</p>
             )}
             {request.faculty?.dataQualityFlag === 'PENDING_REVIEW' && (
-              <span className="text-amber-400 text-[10px] font-semibold mt-1.5 block">⚠️ PENDING REVIEW</span>
+              <span style={{ color: 'var(--warning)', fontSize: 10, fontWeight: 600, marginTop: 8, display: 'block' }}>⚠️ PENDING REVIEW</span>
             )}
           </div>
 
-          {/* Timeline */}
+          {/* Timeline card */}
           <div className="card p-4">
-            <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">Timeline</p>
+            <p style={{ color: 'var(--muted)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Timeline</p>
             <InfoRow label="Visit Date"  value={request.requestDate} />
             <InfoRow label="Rep"         value={request.rep?.fullName} />
-            {request.submittedAt  && <InfoRow label="Submitted"   value={Ts({ value: request.submittedAt })} />}
-            {request.approvedAt   && <InfoRow label="Approved"    value={Ts({ value: request.approvedAt })} />}
-            {request.rejectedAt   && <InfoRow label="Rejected"    value={Ts({ value: request.rejectedAt })} />}
-            {request.dispatchedAt && <InfoRow label="Dispatched"  value={Ts({ value: request.dispatchedAt })} />}
-            {request.deliveredAt  && <InfoRow label="Delivered"   value={Ts({ value: request.deliveredAt })} />}
-            {request.adoptionMarkedAt && <InfoRow label="Adoption Marked" value={Ts({ value: request.adoptionMarkedAt })} />}
+            {request.submittedAt  && <InfoRow label="Submitted"   value={<Ts value={request.submittedAt} />} />}
+            {request.approvedAt   && <InfoRow label="Approved"    value={<Ts value={request.approvedAt} />} />}
+            {request.rejectedAt   && <InfoRow label="Rejected"    value={<Ts value={request.rejectedAt} />} />}
+            {request.dispatchedAt && <InfoRow label="Dispatched"  value={<Ts value={request.dispatchedAt} />} />}
+            {request.deliveredAt  && <InfoRow label="Delivered"   value={<Ts value={request.deliveredAt} />} />}
+            {request.adoptionMarkedAt && <InfoRow label="Adoption Marked" value={<Ts value={request.adoptionMarkedAt} />} />}
           </div>
         </div>
 
-        {/* Dispatch */}
+        {/* Dispatch card */}
         <div className="card p-4 mb-4">
-          <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-2">Dispatch</p>
+          <p style={{ color: 'var(--muted)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Dispatch</p>
           <InfoRow label="Type" value={request.dispatchType === 'college' ? 'College address' : 'Alternate address'} />
           {request.dispatchType !== 'college' && (
             <>
@@ -275,51 +293,51 @@ export default function CompRequestDetail() {
           {request.visitNotes && <InfoRow label="Visit Notes" value={request.visitNotes} />}
         </div>
 
-        {/* Books */}
+        {/* Books card */}
         <div className="card p-4 mb-4">
-          <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">
+          <p style={{ color: 'var(--muted)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>
             Books ({request.lineItems?.length ?? 0})
           </p>
-          {!request.lineItems?.length
-            ? <p className="text-gray-600 text-sm">No books added</p>
-            : (
-              <div className="divide-y divide-white/5">
-                {request.lineItems.map(li => (
-                  <div key={li.lineItemId} className="py-3 flex items-start gap-3">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium text-sm truncate">{li.bookTitle}</p>
-                      <p className="text-gray-500 text-xs">
-                        {li.bookAuthors?.map(a => a.authorName).join(', ') || 'No authors'}
-                        {li.subjectContextFree ? ` · ${li.subjectContextFree}` : ''}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-gray-400 text-xs font-mono">×{li.quantity}</span>
-                      <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded">{li.format}</span>
-                      {li.dupOverride && <span className="text-amber-600 text-[10px]">dup ack</span>}
-                    </div>
+          {!request.lineItems?.length ? (
+            <p style={{ color: 'var(--faint)', fontSize: 14 }}>No books added</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {request.lineItems.map(li => (
+                <div key={li.lineItemId} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: 'var(--text)', fontWeight: 500, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{li.bookTitle}</p>
+                    <p style={{ color: 'var(--muted)', fontSize: 12 }}>
+                      {li.bookAuthors?.map(a => a.authorName).join(', ') || 'No authors'}
+                      {li.subjectContextFree ? ` · ${li.subjectContextFree}` : ''}
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                    <span style={{ color: 'var(--muted)', fontSize: 12, fontFamily: 'monospace' }}>×{li.quantity}</span>
+                    <span style={{ fontSize: 12, color: 'var(--muted)', background: 'var(--input)', padding: '2px 8px', borderRadius: 4 }}>{li.format}</span>
+                    {li.dupOverride && <span style={{ color: '#d97706', fontSize: 10 }}>dup ack</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Audit log */}
+        {/* Audit log card */}
         {request.auditLog?.length > 0 && (
           <div className="card p-4">
-            <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">Activity</p>
-            <div className="space-y-2">
+            <p style={{ color: 'var(--muted)', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Activity</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {request.auditLog.map(e => (
-                <div key={e.auditId} className="flex items-start gap-2.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gray-700 mt-1.5 flex-shrink-0" />
+                <div key={e.auditId} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--faint)', marginTop: 6, flexShrink: 0 }} />
                   <div>
-                    <p className="text-gray-300 text-xs">
+                    <p style={{ color: 'var(--text)', fontSize: 13 }}>
                       {e.fromStatus
-                        ? <><span className="text-gray-500">{e.fromStatus.replace(/_/g,' ')}</span> → <strong>{e.toStatus.replace(/_/g,' ')}</strong></>
+                        ? <><span style={{ color: 'var(--muted)' }}>{e.fromStatus.replace(/_/g,' ')}</span> → <strong>{e.toStatus.replace(/_/g,' ')}</strong></>
                         : <strong>{e.toStatus.replace(/_/g,' ')}</strong>}
-                      {e.notes && <span className="text-gray-500"> · {e.notes}</span>}
+                      {e.notes && <span style={{ color: 'var(--muted)' }}> · {e.notes}</span>}
                     </p>
-                    <p className="text-gray-600 text-[10px] mt-0.5">{Ts({ value: e.changedAt })}</p>
+                    <p style={{ color: 'var(--faint)', fontSize: 10, marginTop: 2 }}>{<Ts value={e.changedAt} />}</p>
                   </div>
                 </div>
               ))}
