@@ -228,6 +228,149 @@
   --phase-pending-accent:    #334155;
   --phase-items-text:        #334155;
 }
+:root {
+  /* ... existing light variables ... */
+
+  /* Status colors (light mode) */
+  --status-draft-bg:             #f1f5f9;
+  --status-draft-border:         #cbd5e1;
+  --status-draft-text:           #475569;
+  --status-draft-dot:            #64748b;
+
+  --status-submitted-bg:         #eff6ff;
+  --status-submitted-border:     #bfdbfe;
+  --status-submitted-text:       #1e40af;
+  --status-submitted-dot:        #3b82f6;
+
+  --status-approved-bg:          #ecfdf5;
+  --status-approved-border:      #a7f3d0;
+  --status-approved-text:        #065f46;
+  --status-approved-dot:         #10b981;
+
+  --status-rejected-bg:          #fef2f2;
+  --status-rejected-border:      #fecaca;
+  --status-rejected-text:        #991b1b;
+  --status-rejected-dot:         #ef4444;
+
+  --status-dispatched-bg:        #f5f3ff;
+  --status-dispatched-border:    #ddd6fe;
+  --status-dispatched-text:      #4c1d95;
+  --status-dispatched-dot:       #8b5cf6;
+
+  --status-delivered-bg:         #f0fdfa;
+  --status-delivered-border:     #99f6e4;
+  --status-delivered-text:       #0f766e;
+  --status-delivered-dot:        #14b8a6;
+
+  --status-adopted-bg:           #ecfdf5;
+  --status-adopted-border:       #a7f3d0;
+  --status-adopted-text:         #065f46;
+  --status-adopted-dot:          #10b981;
+
+  --status-not-adopted-bg:       #fff7ed;
+  --status-not-adopted-border:   #fed7aa;
+  --status-not-adopted-text:     #9a3412;
+  --status-not-adopted-dot:      #f97316;
+
+  --status-pending-follow-bg:    #fffbeb;
+  --status-pending-follow-border:#fde68a;
+  --status-pending-follow-text:  #92400e;
+  --status-pending-follow-dot:   #f59e0b;
+
+  --status-cancelled-bg:         #f1f5f9;
+  --status-cancelled-border:     #cbd5e1;
+  --status-cancelled-text:       #64748b;
+  --status-cancelled-dot:        #94a3b8;
+
+  /* Accent variables for action buttons (light mode) */
+  --accent-emerald-bg:    rgba(16,185,129,0.1);
+  --accent-emerald-text:  #047857;
+  --accent-emerald-border:rgba(16,185,129,0.3);
+  --accent-red-bg:        rgba(239,68,68,0.1);
+  --accent-red-text:      #b91c1c;
+  --accent-red-border:    rgba(239,68,68,0.3);
+  --accent-purple-bg:     rgba(147,51,234,0.1);
+  --accent-purple-text:   #6b21a8;
+  --accent-purple-border: rgba(147,51,234,0.3);
+  --accent-teal-bg:       rgba(20,184,166,0.1);
+  --accent-teal-text:     #0f766e;
+  --accent-teal-border:   rgba(20,184,166,0.3);
+  --accent-orange-bg:     rgba(249,115,22,0.1);
+  --accent-orange-text:   #9a3412;
+  --accent-orange-border: rgba(249,115,22,0.3);
+}
+
+.dark {
+  /* ... existing dark variables ... */
+
+  /* Status colors (dark mode – original opacity-based) */
+  --status-draft-bg:             rgba(17,24,39,0.8);
+  --status-draft-border:         rgba(55,65,81,0.5);
+  --status-draft-text:           #6b7280;
+  --status-draft-dot:            #4b5563;
+
+  --status-submitted-bg:         rgba(30,64,175,0.25);
+  --status-submitted-border:     rgba(59,130,246,0.3);
+  --status-submitted-text:       #93c5fd;
+  --status-submitted-dot:        #3b82f6;
+
+  --status-approved-bg:          rgba(6,78,59,0.5);
+  --status-approved-border:      rgba(52,211,153,0.25);
+  --status-approved-text:        #6ee7b7;
+  --status-approved-dot:         #34d399;
+
+  --status-rejected-bg:          rgba(127,29,29,0.4);
+  --status-rejected-border:      rgba(239,68,68,0.3);
+  --status-rejected-text:        #fca5a5;
+  --status-rejected-dot:         #ef4444;
+
+  --status-dispatched-bg:        rgba(88,28,135,0.4);
+  --status-dispatched-border:    rgba(168,85,247,0.3);
+  --status-dispatched-text:      #d8b4fe;
+  --status-dispatched-dot:       #a855f7;
+
+  --status-delivered-bg:         rgba(20,184,166,0.25);
+  --status-delivered-border:     rgba(45,212,191,0.3);
+  --status-delivered-text:       #5eead4;
+  --status-delivered-dot:        #14b8a6;
+
+  --status-adopted-bg:           rgba(6,78,59,0.6);
+  --status-adopted-border:       rgba(52,211,153,0.3);
+  --status-adopted-text:         #6ee7b7;
+  --status-adopted-dot:          #34d399;
+
+  --status-not-adopted-bg:       rgba(154,52,18,0.4);
+  --status-not-adopted-border:   rgba(249,115,22,0.3);
+  --status-not-adopted-text:     #fdba74;
+  --status-not-adopted-dot:      #f97316;
+
+  --status-pending-follow-bg:    rgba(146,64,14,0.4);
+  --status-pending-follow-border:rgba(245,158,11,0.3);
+  --status-pending-follow-text:  #fde68a;
+  --status-pending-follow-dot:   #f59e0b;
+
+  --status-cancelled-bg:         rgba(17,24,39,0.8);
+  --status-cancelled-border:     rgba(55,65,81,0.5);
+  --status-cancelled-text:       #6b7280;
+  --status-cancelled-dot:        #4b5563;
+
+  /* Accent variables for action buttons (dark mode) */
+  --accent-emerald-bg:    rgba(6,78,59,0.6);
+  --accent-emerald-text:  #6ee7b7;
+  --accent-emerald-border:rgba(52,211,153,0.3);
+  --accent-red-bg:        rgba(127,29,29,0.4);
+  --accent-red-text:      #fca5a5;
+  --accent-red-border:    rgba(239,68,68,0.3);
+  --accent-purple-bg:     rgba(88,28,135,0.4);
+  --accent-purple-text:   #d8b4fe;
+  --accent-purple-border: rgba(168,85,247,0.3);
+  --accent-teal-bg:       rgba(15,118,110,0.4);
+  --accent-teal-text:     #5eead4;
+  --accent-teal-border:   rgba(45,212,191,0.3);
+  --accent-orange-bg:     rgba(154,52,18,0.4);
+  --accent-orange-text:   #fdba74;
+  --accent-orange-border: rgba(249,115,22,0.3);
+}
 /* ─── RESET / BASE ───────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
