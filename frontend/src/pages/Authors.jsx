@@ -79,15 +79,15 @@ export default function Authors() {
   const columns = [
     {
       key: 'authorName', header: 'Author', sortable: true,
-      render: row => <span className="text-white font-medium">{row.authorName}</span>,
+      render: row => <span className="text-gray-900 dark:text-white font-medium">{row.authorName}</span>,
     },
     {
       key: 'email', header: 'Email', width: 'w-52',
-      render: row => <span className="text-gray-400 text-xs">{row.email ?? '—'}</span>,
+      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs">{row.email ?? '—'}</span>,
     },
     {
       key: 'phone', header: 'Phone', width: 'w-36',
-      render: row => <span className="text-gray-400 text-xs font-mono">{row.phone ?? '—'}</span>,
+      render: row => <span className="text-gray-500 dark:text-gray-400 text-xs font-mono">{row.phone ?? '—'}</span>,
     },
     {
       key: 'isActive', header: 'Status', width: 'w-28',
@@ -104,7 +104,7 @@ export default function Authors() {
 
   return (
     <Layout>
-      <div className="p-6">
+      <div className="p-6 bg-white dark:bg-[#05080f] min-h-screen">
         <PageHeader
           title="Authors"
           subtitle={`${total} authors`}
@@ -135,7 +135,7 @@ export default function Authors() {
       <FormModal open={drawerOpen} onClose={() => setDrawerOpen(false)}
         title={editing ? 'Edit Author' : 'Add Author'} onSave={handleSave} saving={saving}>
         {formError && (
-          <div className="bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-400 text-sm">
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-3 mb-4 text-red-600 dark:text-red-400 text-sm">
             {formError}
           </div>
         )}
